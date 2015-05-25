@@ -6,7 +6,7 @@ package org.assessmentbuddy.model
 class Program {
     String name
 
-    static hasMany = [ outcomes : Outcome ]
+    static hasMany = [ outcomes : Outcome, courses : Course ]
     
     static constraints = {
     }

@@ -1,12 +1,12 @@
 package org.assessmentbuddy.model
 
-class Outcome {
+class Indicator {
     String shortName
     String description
-
-    static belongsTo = [ program : Program ]
     
-    static hasMany = [ indicators : Indicator ]
+    static belongsTo = [ outcome : Outcome ]
+    
+    static hasMany = [ measurements : Measurement ]
 
     static constraints = {
     }
