@@ -10,5 +10,6 @@ class User {
     String email
 
     static constraints = {
+        userName unique: true
     }
 }
