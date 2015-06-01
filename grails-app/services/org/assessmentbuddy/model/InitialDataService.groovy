@@ -11,6 +11,26 @@ class InitialDataService {
         p.save()
     }
     
+    def createInitialOutcomesAndIndicators() {
+        // Initial program(s) need to already exist
+        def p = Program.findByName("Computer Science")
+        
+        def outcomeA = new Outcome(
+            shortName: "a",
+            description: "An ability to apply knowledge of computing and mathematics appropriate to the discipline"
+        )
+        
+        def outcomeB = new Outcome(
+            shortName: "b",
+            description: "An ability to analyze a problem, and identify and define the computing requirements appropriate to its solution"
+        )
+        
+        p.addToOutcomes(outcomeA)
+        p.addToOutcomes(outcomeB)
+        
+        p.save()
+    }
+    
     def createInitialUsersAndRoles() {
         // Initial program(s) need to already exist
         def p = Program.findByName("Computer Science")
