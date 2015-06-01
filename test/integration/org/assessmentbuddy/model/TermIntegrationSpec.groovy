@@ -10,7 +10,6 @@ class TermIntegrationSpec extends IntegrationSpec {
     }
 
     def cleanup() {
-        Term.where { }.deleteAll()
     }
 
     void "test that initial terms are created"() {

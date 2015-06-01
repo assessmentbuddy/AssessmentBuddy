@@ -4,6 +4,28 @@ import grails.transaction.Transactional
 
 @Transactional
 class InitialDataService {
+    def bcryptService
+    
+    def createInitialPrograms() {
+        def p = new Program(name: "Computer Science")
+        p.save()
+    }
+    
+    def createInitialUsersAndRoles() {
+        // Initial program(s) need to already exist
+        def p = Program.findByName("Computer Science")
+
+        def u = new User(
+            userName: 'dhovemey',
+            passwordHash: bcryptService.hashPassword("muffin"),
+            fullName: "David Hovemeyer",
+            email: "dhovemey@ycp.edu"
+        )
+        u.save()
+        
+        def r = new Role(role: Role.RoleType.ADMIN, program: p, score: Role.Scope.ALL_PROGRAMS)
+        r.save()
+    }
 
     def createInitialTerms() {
         def terms = [
@@ -15,8 +37,6 @@ class InitialDataService {
             new Term(name: "Fall", seq: 5),
         ]
         
-        terms.each {
-            $it.save()
-        }
+        terms.each { $it.save() }
     }
 }
