@@ -103,6 +103,25 @@ class InitialDataService {
             new Term(name: "Fall", seq: 5),
         ]
         
-        terms.each { $it.save() }
+        terms.each { it.save() }
+    }
+    
+    def createInitialRubrics() {
+        // programs need to have been created already
+        def compSci = Program.findByName("Computer Science")
+        
+        def stdRubric = new Rubric(
+            name: "Standard CS Rubric"
+        )
+        
+        def needsImprovement = new AchievementLevel( name: "Needs Improvement", rank: 0 )
+        def meetsExpectations = new AchievementLevel( name: "Meets Expectations", rank: 70 )
+        def exceedsExpectations = new AchievementLevel( name: "Exceeds Expectations", rank: 85 )
+        stdRubric.addToAchievementLevels(needsImprovement)
+        stdRubric.addToAchievementLevels(meetsExpectations)
+        stdRubric.addToAchievementLevels(exceedsExpectations)
+        
+        compSci.addToRubrics(stdRubric)
+        compSci.save()
     }
 }
