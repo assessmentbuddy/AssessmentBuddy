@@ -8,6 +8,8 @@ class User {
     String passwordHash
     String fullName
     String email
+    
+    static hasMany = [ roles: Role ]
 
     static constraints = {
         userName unique: true

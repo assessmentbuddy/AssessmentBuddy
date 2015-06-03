@@ -64,19 +64,33 @@ class InitialDataService {
     }
     
     def createInitialUsersAndRoles() {
+        def admin = new User(
+            userName: "admin",
+            passwordHash: bcryptService.hashPassword("mint1pen"),
+            fullName: "Super User",
+            email: "admin@ycp.edu"
+        )
+        
+        def adminRole = new Role(roleType: Role.RoleType.ADMIN, program: null, scope: Role.Scope.ALL_PROGRAMS)
+        admin.addToRoles(adminRole)
+        
+        admin.save()
+
         // Initial program(s) need to already exist
-        def p = Program.findByName("Computer Science")
+        def compSci = Program.findByName("Computer Science")
 
         def u = new User(
-            userName: 'dhovemey',
+            userName: "dhovemey",
             passwordHash: bcryptService.hashPassword("muffin"),
             fullName: "David Hovemeyer",
             email: "dhovemey@ycp.edu"
         )
-        u.save()
         
-        def r = new Role(role: Role.RoleType.ADMIN, program: p, score: Role.Scope.ALL_PROGRAMS)
-        r.save()
+        def r = new Role(roleType: Role.RoleType.REPORTER, program: compSci, scope: Role.Scope.ONE_PROGRAM)
+        
+        u.addToRoles(r)
+        
+        u.save()
     }
 
     def createInitialTerms() {
