@@ -2,13 +2,16 @@ package org.assessmentbuddy.model
 
 import grails.transaction.Transactional
 
+/**
+ * Create initial data for testing.
+ */
 @Transactional
 class InitialDataService {
     def bcryptService
     
     def createInitialPrograms() {
         def p = new Program(name: "Computer Science")
-        p.save()
+        p.save(failOnError: true)
     }
     
     def createInitialOutcomesAndIndicators() {
@@ -60,7 +63,7 @@ class InitialDataService {
         p.addToOutcomes(outcomeA)
         p.addToOutcomes(outcomeB)
         
-        p.save()
+        p.save(failOnError: true)
     }
     
     def createInitialUsersAndRoles() {
@@ -74,7 +77,7 @@ class InitialDataService {
         def adminRole = new Role(roleType: Role.RoleType.ADMIN, program: null, scope: Role.Scope.ALL_PROGRAMS)
         admin.addToRoles(adminRole)
         
-        admin.save()
+        admin.save(failOnError: true)
 
         // Initial program(s) need to already exist
         def compSci = Program.findByName("Computer Science")
@@ -90,7 +93,7 @@ class InitialDataService {
         
         u.addToRoles(r)
         
-        u.save()
+        u.save(failOnError: true)
     }
 
     def createInitialTerms() {
@@ -103,7 +106,13 @@ class InitialDataService {
             new Term(name: "Fall", seq: 5),
         ]
         
-        terms.each { it.save() }
+        terms.each { it.save(failOnError: true) }
+        
+        def ay2015_2016 = new AcademicYear(start: 2015, end: 2016)
+        def ay2016_2017 = new AcademicYear(start: 2016, end: 2017)
+
+        ay2015_2016.save(failOnError: true)
+        ay2016_2017.save(failOnError: true)
     }
     
     def createInitialRubrics() {
@@ -122,6 +131,59 @@ class InitialDataService {
         stdRubric.addToAchievementLevels(exceedsExpectations)
         
         compSci.addToRubrics(stdRubric)
-        compSci.save()
+        compSci.save(failOnError: true)
+    }
+    
+    def createInitialCourses() {
+        // initial programs need to exist
+        def compSci = Program.findByName("Computer Science")
+        
+        Course cs101 = new Course(
+            shortName: "CS 101",
+            title: "Fundamentals of Computer Science I"
+        )
+        compSci.addToCourses(cs101)
+        
+        compSci.save(failOnError: true)
+    }
+    
+    def createInitialMeasurements() {
+        // initial programs, rubrics, and academic years/terms need to exist
+        def compSci = Program.findByName("Computer Science")
+        def cs101 = Course.where { program == compSci && shortName == "CS 101" }.get()
+        def spring = Term.where { name == "Spring" }.get()
+        def ay2015_2016 = AcademicYear.where { start == 2015 && end == 2016 }.get()
+        def stdRubric = Rubric.where { program == compSci && name == "Standard CS Rubric" }.get()
+        def achievementLevels = stdRubric.achievementLevels.sort { it.rank }
+        def indicator = Indicator.where { shortName == "a.1" }.get()
+        
+        def measurement = new Measurement(
+            program: compSci,
+            course: cs101,
+            term: spring,
+            academicYear: ay2015_2016,
+            object: "Exam 4, Question 10, a programming question to search for the largest element in an array",
+            discussion: "Several students had index out of bounds errors.",
+            indicator: indicator,
+            rubric: stdRubric
+        )
+        
+        def needsImprovementTally = new AchievementLevelTally(
+            count: 3,
+            achievementLevel: achievementLevels[0],
+            measurement: measurement
+        )
+        def meetsExpectationsTally = new AchievementLevelTally(
+            count: 15,
+            achievementLevel: achievementLevels[1],
+            measurement: measurement
+        )
+        def exceedsExpectationsTally = new AchievementLevelTally(
+            count: 4,
+            achievementLevel: achievementLevels[2],
+            measurement: measurement
+        )
+        
+        measurement.save(failOnError: true)
     }
 }

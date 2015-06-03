@@ -24,6 +24,7 @@ class RubricIntegrationSpec extends IntegrationSpec {
         rubrics.size() == 1
         
         def stdRubric = rubrics[0]
+        stdRubric.name == "Standard CS Rubric"
         
         def achievementLevels = stdRubric.achievementLevels.sort { it.rank }
         achievementLevels.size() == 3

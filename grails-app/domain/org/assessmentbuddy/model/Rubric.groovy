@@ -5,7 +5,7 @@ class Rubric {
     
     static belongsTo = [ program : Program ]
     
-    static hasMany = [ achievementLevels : AchievementLevel, measurement : Measurement ]
+    static hasMany = [ achievementLevels : AchievementLevel ]
 
     static constraints = {
         name size: 1..64

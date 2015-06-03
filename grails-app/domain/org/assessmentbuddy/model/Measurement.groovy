@@ -1,9 +1,9 @@
 package org.assessmentbuddy.model
 
 class Measurement {
+    Program program
     Course course
     Term term
-    int year
     AcademicYear academicYear
     String object // what was assessed, e.g., an assignment, exam question, etc.
     String discussion
