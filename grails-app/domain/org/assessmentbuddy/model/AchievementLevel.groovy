@@ -9,5 +9,6 @@ class AchievementLevel {
     static hasMany = [ achievementLevelTallies : AchievementLevelTally, targets : Target ]
 
     static constraints = {
+        name size: 1..64
     }
 }

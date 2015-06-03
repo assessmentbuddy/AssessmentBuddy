@@ -9,5 +9,7 @@ class Indicator {
     static hasMany = [ measurements : Measurement ]
 
     static constraints = {
+        shortName size: 1..40
+        description size: 1..255
     }
 }

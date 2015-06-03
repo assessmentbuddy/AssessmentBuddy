@@ -15,5 +15,7 @@ class Measurement {
     static constraints = {
         // Some assessments don't occur in the context of a course
         course nullable : true
+        object size: 1..255
+        discussion size: 0..262144 // this will map onto a text blob
     }
 }

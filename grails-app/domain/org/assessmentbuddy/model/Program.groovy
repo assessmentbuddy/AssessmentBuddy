@@ -9,5 +9,6 @@ class Program {
     static hasMany = [ outcomes : Outcome, courses : Course, rubrics : Rubric ]
     
     static constraints = {
+        name size: 1..64
     }
 }

@@ -5,6 +5,6 @@ class Term {
     int seq
 
     static constraints = {
-        name unique: true
+        name unique: true, size: 1..64
     }
 }

@@ -6,6 +6,7 @@ class Target {
     AchievementLevel achievementLevel
 
     static constraints = {
+        name size: 1..64
     }
     
 //    boolean isMet(Measurement measurement) {

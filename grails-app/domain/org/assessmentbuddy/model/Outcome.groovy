@@ -9,5 +9,7 @@ class Outcome {
     static hasMany = [ indicators : Indicator ]
 
     static constraints = {
+        shortName size: 1..40
+        description size: 1..255
     }
 }

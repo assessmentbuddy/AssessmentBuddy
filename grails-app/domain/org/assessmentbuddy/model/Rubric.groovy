@@ -8,5 +8,6 @@ class Rubric {
     static hasMany = [ achievementLevels : AchievementLevel, measurement : Measurement ]
 
     static constraints = {
+        name size: 1..64
     }
 }
