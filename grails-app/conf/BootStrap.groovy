@@ -4,7 +4,6 @@ class BootStrap {
     def initialDataService
 
     def init = { servletContext ->
-        /*
         initialDataService.createInitialPrograms()
         initialDataService.createInitialOutcomesAndIndicators()
         initialDataService.createInitialUsersAndRoles()
@@ -12,7 +11,6 @@ class BootStrap {
         initialDataService.createInitialRubrics()
         initialDataService.createInitialCourses()
         initialDataService.createInitialMeasurements()
-        */
     }
     def destroy = {
     }
