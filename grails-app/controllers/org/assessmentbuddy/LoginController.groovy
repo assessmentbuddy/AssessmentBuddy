@@ -12,6 +12,7 @@ class LoginController {
         
         if (!userName || userName == "") {
             flash.message = "Please specify a username"
+            render( view: 'index' )
             return
         }
         
