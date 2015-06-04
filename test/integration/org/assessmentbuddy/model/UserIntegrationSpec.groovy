@@ -42,6 +42,18 @@ class UserIntegrationSpec extends IntegrationSpec {
         User.findByUserName("dhovemey").email == "david.hovemeyer@gmail.com"
     }
     
+    def "change user password"() {
+        given: "an existing user"
+        
+        when: "the password is changed"
+        def loadedUser = User.findByUserName("dhovemey")
+        loadedUser.passwordHash = bcryptService.hashPassword("frotz")
+        loadedUser.save()
+        
+        then: "the new password is in effect"
+        bcrypt.checkPassword("frotz", User.findByUserName("dhovemey").passwordHash)
+    }
+    
     def "check that user role exists"() {
         given: "an existing user"
         
