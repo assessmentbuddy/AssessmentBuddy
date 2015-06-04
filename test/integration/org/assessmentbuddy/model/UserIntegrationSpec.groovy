@@ -51,7 +51,7 @@ class UserIntegrationSpec extends IntegrationSpec {
         loadedUser.save()
         
         then: "the new password is in effect"
-        bcrypt.checkPassword("frotz", User.findByUserName("dhovemey").passwordHash)
+        bcryptService.checkPassword("frotz", User.findByUserName("dhovemey").passwordHash)
     }
     
     def "check that user role exists"() {
