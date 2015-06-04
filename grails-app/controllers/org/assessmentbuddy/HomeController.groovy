@@ -1,6 +1,6 @@
 package org.assessmentbuddy
 
-class IndexController {
+class HomeController {
 
     def index() { }
 }
