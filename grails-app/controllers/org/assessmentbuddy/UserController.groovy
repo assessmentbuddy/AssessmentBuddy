@@ -48,7 +48,10 @@ class UserController {
 		if (!userToSave.save()) {
 			// Failed to save, redirect to edit page
 			flash.message = "Could not save user"
-			redirect( action: 'edit', params: params, id: params.id )
+			render( view: 'edit', model: [
+					userToEdit: userToSave,
+					password: params.password,
+					passwordConfirm: params.passwordConfirm ])
 			return
 		}
 		
