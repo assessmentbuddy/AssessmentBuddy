@@ -33,4 +33,8 @@ class User {
         fullName size: 1..200
         email size: 3..200
     }
+	
+	def isAdmin() {
+		return roles.any { it.roleType == Role.RoleType.ADMIN }
+	}
 }
