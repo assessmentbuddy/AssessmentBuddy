@@ -19,10 +19,19 @@ class UserController {
 	
 	def edit() {
 		User userToEdit
+		def password = "", passwordConfirm = ""
 		
 		if (!params.id) {
-			// Create a new user
-			userToEdit = new User()
+			// If the user to edit is in flash storage, use that,
+			// otherwise create a new one
+			if (flash.userToEdit) {
+				// These are from previous edit form entries
+				userToEdit = flash.userToEdit
+				password = flash.password
+				passwordConfirm = flash.passwordConfirm
+			} else {
+				userToEdit = new User()
+			}
 		} else {
 			// Edit existing user
 			userToEdit = User.get(params.id)
@@ -32,7 +41,7 @@ class UserController {
 			}
 		}
 		
-		[ userToEdit: userToEdit ]
+		[ userToEdit: userToEdit, password: password, passwordConfirm: passwordConfirm ]
 	}
 	
 	def save() {
@@ -47,11 +56,11 @@ class UserController {
 		
 		if (!userToSave.save()) {
 			// Failed to save, redirect to edit page
-			flash.message = "Could not save user"
-			render( view: 'edit', model: [
-					userToEdit: userToSave,
-					password: params.password,
-					passwordConfirm: params.passwordConfirm ])
+			flash.message = "Could not save user" // TODO: diagnostics
+			flash.password = params.password
+			flash.passwordConfirm = params.passwordConfirm
+			flash.userToEdit = userToSave
+			redirect( action: 'edit' )
 			return
 		}
 		
