@@ -51,7 +51,7 @@ class UserController {
 		// FIXME: ensure that password and passwordConfirm match
 		
 		if (params.password && params.password != "") {
-			params.passwordHash = bcryptService.hashPassword(params.password)
+			userToSave.passwordHash = bcryptService.hashPassword(params.password)
 		}
 		
 		if (!userToSave.save()) {

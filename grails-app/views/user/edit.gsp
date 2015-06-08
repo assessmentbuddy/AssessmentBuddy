@@ -35,11 +35,18 @@
 			</table>
 		</g:form>
 		
-        <g:if test="${flash.message}">
-            ${flash.message}
-        </g:if>
+		<div>
+			<g:if test="${flash.message}">
+				${flash.message}
+			</g:if>
+		</div>
 		<g:hasErrors bean="${userToEdit}">
-			User to edit has errors?
+			<div>
+				User to edit has errors?
+			</div>
 		</g:hasErrors>
+		<div>
+			<g:renderErrors bean="${userToEdit}"/>
+		</div>
     </body>
 </html>
