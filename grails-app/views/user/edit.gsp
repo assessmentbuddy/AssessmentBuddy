@@ -38,5 +38,8 @@
         <g:if test="${flash.message}">
             ${flash.message}
         </g:if>
+		<g:hasErrors bean="${userToEdit}">
+			User to edit has errors?
+		</g:hasErrors>
     </body>
 </html>

@@ -35,6 +35,9 @@ class User {
     }
 	
 	def isAdmin() {
-		return roles.any { it.roleType == Role.RoleType.ADMIN }
+		def res = roles.any { it.roleType == Role.RoleType.ADMIN }
+		println "User ${userName} is admin: ${res}"
+		println "There are ${roles.size()} roles"
+		return res
 	}
 }
