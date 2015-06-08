@@ -23,8 +23,8 @@ class UserIntegrationSpec extends IntegrationSpec {
     def initialDataService
 
     def setup() {
-        initialDataService.createInitialPrograms()
-        initialDataService.createInitialUsersAndRoles()
+        initialDataService.createTestingPrograms()
+        initialDataService.createTestingUsersAndRoles()
     }
 
     def cleanup() {

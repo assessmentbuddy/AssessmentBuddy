@@ -22,7 +22,7 @@ class AcademicYearIntegrationSpec extends IntegrationSpec {
     def initialDataService
 
     def setup() {
-        initialDataService.createInitialTerms() // also creates AcademicYears
+        initialDataService.createTestingTerms() // also creates AcademicYears
     }
 
     def cleanup() {

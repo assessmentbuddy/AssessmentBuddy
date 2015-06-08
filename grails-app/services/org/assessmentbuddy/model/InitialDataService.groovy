@@ -25,12 +25,26 @@ import grails.transaction.Transactional
 class InitialDataService {
     def bcryptService
     
-    def createInitialPrograms() {
+	def createInitialAdminUser() {
+        def admin = new User(
+            userName: "admin",
+            passwordHash: bcryptService.hashPassword("admin"),
+            fullName: "Super User",
+            email: "admin@ycp.edu"
+        )
+        
+        def adminRole = new Role(roleType: Role.RoleType.ADMIN, program: null, scope: Role.Scope.ALL_PROGRAMS)
+        admin.addToRoles(adminRole)
+        
+        admin.save(failOnError: true)
+	}
+	
+    def createTestingPrograms() {
         def p = new Program(name: "Computer Science")
         p.save(failOnError: true)
     }
     
-    def createInitialOutcomesAndIndicators() {
+    def createTestingOutcomesAndIndicators() {
         // Initial program(s) need to already exist
         def p = Program.findByName("Computer Science")
         
@@ -82,19 +96,7 @@ class InitialDataService {
         p.save(failOnError: true)
     }
     
-    def createInitialUsersAndRoles() {
-        def admin = new User(
-            userName: "admin",
-            passwordHash: bcryptService.hashPassword("mint1pen"),
-            fullName: "Super User",
-            email: "admin@ycp.edu"
-        )
-        
-        def adminRole = new Role(roleType: Role.RoleType.ADMIN, program: null, scope: Role.Scope.ALL_PROGRAMS)
-        admin.addToRoles(adminRole)
-        
-        admin.save(failOnError: true)
-
+    def createTestingUsersAndRoles() {
         // Initial program(s) need to already exist
         def compSci = Program.findByName("Computer Science")
 
@@ -112,7 +114,7 @@ class InitialDataService {
         u.save(failOnError: true)
     }
 
-    def createInitialTerms() {
+    def createTestingTerms() {
         def terms = [
             new Term(name: "Winter", seq: 0),
             new Term(name: "Spring", seq: 1),
@@ -131,7 +133,7 @@ class InitialDataService {
         ay2016_2017.save(failOnError: true)
     }
     
-    def createInitialRubrics() {
+    def createTestingRubrics() {
         // programs need to have been created already
         def compSci = Program.findByName("Computer Science")
         
@@ -150,7 +152,7 @@ class InitialDataService {
         compSci.save(failOnError: true)
     }
     
-    def createInitialCourses() {
+    def createTestingCourses() {
         // initial programs need to exist
         def compSci = Program.findByName("Computer Science")
         
@@ -163,7 +165,7 @@ class InitialDataService {
         compSci.save(failOnError: true)
     }
     
-    def createInitialMeasurements() {
+    def createTestingMeasurements() {
         // initial programs, rubrics, and academic years/terms need to exist
         def compSci = Program.findByName("Computer Science")
         def cs101 = Course.where { program == compSci && shortName == "CS 101" }.get()

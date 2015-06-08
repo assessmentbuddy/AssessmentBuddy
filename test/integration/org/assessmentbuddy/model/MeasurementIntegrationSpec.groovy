@@ -22,11 +22,11 @@ class MeasurementIntegrationSpec extends IntegrationSpec {
     def initialDataService
 
     def setup() {
-        initialDataService.createInitialPrograms()
-        initialDataService.createInitialTerms()
-        initialDataService.createInitialRubrics()
-        initialDataService.createInitialOutcomesAndIndicators()
-        initialDataService.createInitialMeasurements()
+        initialDataService.createTestingPrograms()
+        initialDataService.createTestingTerms()
+        initialDataService.createTestingRubrics()
+        initialDataService.createTestingOutcomesAndIndicators()
+        initialDataService.createTestingMeasurements()
     }
 
     def cleanup() {

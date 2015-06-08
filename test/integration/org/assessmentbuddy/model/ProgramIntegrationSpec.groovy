@@ -22,8 +22,8 @@ class ProgramIntegrationSpec extends IntegrationSpec {
     def initialDataService
 
     def setup() {
-        initialDataService.createInitialPrograms()
-        initialDataService.createInitialOutcomesAndIndicators()
+        initialDataService.createTestingPrograms()
+        initialDataService.createTestingOutcomesAndIndicators()
     }
 
     def cleanup() {

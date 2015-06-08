@@ -22,7 +22,7 @@ class TermIntegrationSpec extends IntegrationSpec {
     def initialDataService
 
     def setup() {
-        initialDataService.createInitialTerms()
+        initialDataService.createTestingTerms()
     }
 
     def cleanup() {

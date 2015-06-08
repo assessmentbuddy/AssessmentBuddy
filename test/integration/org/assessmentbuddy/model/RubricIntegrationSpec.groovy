@@ -22,8 +22,8 @@ class RubricIntegrationSpec extends IntegrationSpec {
     def initialDataService
 
     def setup() {
-        initialDataService.createInitialPrograms()
-        initialDataService.createInitialRubrics()
+        initialDataService.createTestingPrograms()
+        initialDataService.createTestingRubrics()
     }
 
     def cleanup() {
