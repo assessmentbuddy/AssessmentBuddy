@@ -32,11 +32,11 @@ class LoginController {
         
         render( view: 'index' )
     }
-	
-	def logout() {
-		if (session.user) {
-			session.user = null
-		}
-		redirect(action: 'index')
-	}
+    
+    def logout() {
+        if (session.user) {
+            session.user = null
+        }
+        redirect(action: 'index')
+    }
 }

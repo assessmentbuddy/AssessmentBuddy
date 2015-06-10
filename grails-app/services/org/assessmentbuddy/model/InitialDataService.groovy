@@ -25,7 +25,7 @@ import grails.transaction.Transactional
 class InitialDataService {
     def bcryptService
     
-	def createInitialAdminUser() {
+    def createInitialAdminUser() {
         def admin = new User(
             userName: "admin",
             passwordHash: bcryptService.hashPassword("admin"),
@@ -37,8 +37,8 @@ class InitialDataService {
         admin.addToRoles(adminRole)
         
         admin.save(failOnError: true)
-	}
-	
+    }
+    
     def createTestingPrograms() {
         def p = new Program(name: "Computer Science")
         p.save(failOnError: true)

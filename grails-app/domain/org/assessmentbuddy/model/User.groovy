@@ -33,11 +33,11 @@ class User {
         fullName size: 1..200
         email size: 3..200
     }
-	
-	def isAdmin() {
-		def res = roles.any { it.roleType == Role.RoleType.ADMIN }
-		println "User ${userName} is admin: ${res}"
-		println "There are ${roles.size()} roles"
-		return res
-	}
+    
+    def isAdmin() {
+        def res = roles.any { it.roleType == Role.RoleType.ADMIN }
+        println "User ${userName} is admin: ${res}"
+        println "There are ${roles.size()} roles"
+        return res
+    }
 }
