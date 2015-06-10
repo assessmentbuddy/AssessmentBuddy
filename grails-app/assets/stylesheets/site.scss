@@ -38,7 +38,24 @@ body {
 	padding: 1ex 0;
 }
 
-.footer a {
+.navbar {
+	background: $navbar;
+	color: white;
+}
+
+#navleft {
+	margin-left: 1ex;
+	float: left;
+}
+
+#navright {
+	margin-right: 1ex;
+	float: right;
+}
+
+#navright:after { clear: both; }
+
+.footer a, .navbar a {
 	color: white;
 }
 
