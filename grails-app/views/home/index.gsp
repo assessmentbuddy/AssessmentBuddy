@@ -10,6 +10,7 @@
         <nav>
             <g:if test="${user.isAdmin()}">
                 <g:link controller="user" action="index" class="btnlink">Manage users</g:link>
+                <g:link controller="program" action="index" class="btnlink">Manage programs</g:link>
             </g:if>
         </nav>
     </body>
