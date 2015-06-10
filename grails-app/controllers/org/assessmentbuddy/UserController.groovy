@@ -14,7 +14,7 @@ class UserController {
     
     def create() {
         // Edit a new user
-        redirect( action: 'edit', model: [ userToEdit: new User() ] )
+        redirect( action: 'edit' )
     }
     
     def edit() {

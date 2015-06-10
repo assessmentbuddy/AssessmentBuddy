@@ -7,7 +7,9 @@
     <body>
         <div class="pageinfo">Manage programs</div>
         
-        <p>TODO: stuff</p>
+        <nav>
+            <g:link action="create" class="btnlink">Add a new program</g:link>
+        </nav>
         
         <g:if test="${flash.message}">
             <div class="info">
