@@ -4,7 +4,7 @@ class SecurityFilters {
     def filters = {
 		// Make sure user is logged in for any controller other than
 		// the login controller.
-        loginCheck(controller:'login', action:'*', invert: true) {
+        loginCheck(controller:'login|assets', action:'*', invert: true) {
             before = {
                 if (!session.user) {
                     redirect(controller: "login", action: "index")

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+		<meta name="layout" content="main"/>
         <title><g:meta name="app.name"/>: Edit user</title>
     </head>
     <body>
-        <h1><g:meta name="app.name"/>: Edit user</h1>
-		
 		<g:form action="save">
 			<table>
 				<tr>

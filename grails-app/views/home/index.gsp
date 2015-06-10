@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+		<meta name="layout" content="main"/>
         <title><g:meta name="app.name"/>: Home</title>
     </head>
     <body>
-        <h1><g:meta name="app.name"/>: Home</h1>
         Welcome to the home page!
 		
 		<g:if test="${user.isAdmin()}">

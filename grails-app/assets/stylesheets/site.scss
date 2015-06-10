@@ -1,0 +1,40 @@
+/*
+ * AssessmentBuddy CSS rules
+ */
+
+/* Coolors Exported Palette - coolors.co/4c6085-39a0ed-36f1cd-13c4a3-32322c */
+/* TODO: give these names */
+$headerBg: #4c6085;
+$color2: #39a0ed;
+$color3: #36f1cd;
+$color4: #13c4a3;
+$color5: #32322c;
+
+.content {
+	max-width: 40em;
+	margin: 0 auto;
+}
+
+.header, .footer {
+	background: $headerBg;
+	color: white;
+	text-align: center;
+	font-family: "Open Sans", sans-serif;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+}
+
+.header {
+	font-size: 200%;
+	padding: 1ex 0;
+}
+
+.footer {
+	padding: 1ex 0;
+}
+
+.body {
+	margin: 2em 0;
+}
