@@ -59,8 +59,12 @@ body {
 	color: white;
 }
 
-.footer a:visited {
+.footer a:visited, navbar a:visited {
 	color: white;
+}
+
+.footer a:hover, .navbar a:hover {
+	background: black;
 }
 
 .body {
