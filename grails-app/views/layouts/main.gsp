@@ -16,7 +16,7 @@
 				<g:layoutBody/>
 			</div>
 			<div class="footer">
-				Something pithy
+				AssessmentBuddy: An <a href="https://github.com/assessmentbuddy/AssessmentBuddy">open-source assessment tool</a>
 			</div>
 		</div>
 	</body>

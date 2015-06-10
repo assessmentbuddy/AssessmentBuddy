@@ -14,11 +14,10 @@
 				</div>
 				<div class="formfield">
                     <label for="password">Password:</label>
-				</div>
-				<div class="formfield">
                     <g:passwordField name="password"/>
 				</div>
 				<div class="formfield">
+					<label for="login"></label>
                     <g:submitButton name="login" value="Log in"/>
 				</div>
             </fieldset>

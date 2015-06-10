@@ -5,10 +5,14 @@
 /* Coolors Exported Palette - coolors.co/4c6085-39a0ed-36f1cd-13c4a3-32322c */
 /* TODO: give these names */
 $headerBg: #4c6085;
-$color2: #39a0ed;
+$navbar: #39a0ed;
 $color3: #36f1cd;
 $color4: #13c4a3;
 $color5: #32322c;
+
+body {
+	font-family: "Open Sans", sans-serif;
+}
 
 .content {
 	max-width: 40em;
@@ -19,7 +23,6 @@ $color5: #32322c;
 	background: $headerBg;
 	color: white;
 	text-align: center;
-	font-family: "Open Sans", sans-serif;
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
@@ -35,6 +38,33 @@ $color5: #32322c;
 	padding: 1ex 0;
 }
 
+.footer a {
+	color: white;
+}
+
+.footer a:visited {
+	color: white;
+}
+
 .body {
 	margin: 2em 0;
+}
+
+fieldset {
+	margin-top: 1ex;
+}
+
+.formfield {
+	margin-top: 1ex;
+	margin-bottom: 1ex;
+}
+
+.formfield label {
+	display: inline-block;
+	width: 10em;
+	text-align: right;
+}
+
+.formfield input {
+	margin-left: 1em;
 }
