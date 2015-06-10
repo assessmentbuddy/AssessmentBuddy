@@ -6,8 +6,8 @@
 /* TODO: give these names */
 $headerBg: #4c6085;
 $navbar: #39a0ed;
-$color3: #36f1cd;
-$color4: #13c4a3;
+$btn: #36f1cd;
+$btnsel: #13c4a3;
 $color5: #32322c;
 
 body {
@@ -73,6 +73,7 @@ body {
 
 fieldset {
 	margin-top: 1ex;
+        border: 2pt solid $headerBg;
 }
 
 .formfield {
@@ -88,4 +89,33 @@ fieldset {
 
 .formfield input {
 	margin-left: 1em;
+}
+
+a.btnlink {
+    display: block;
+    background: $btn;
+    padding: 1ex;
+    color: black;
+    text-decoration: none;
+    margin: 1ex 2em;
+}
+
+a.btnlink:visited {
+    color: black;
+}
+
+a.btnlink:hover {
+    background: $btnsel;
+    color: white;
+}
+
+.pageinfo:before {
+    content: "» ";
+    font-size: 120%;
+}
+
+.pageinfo {
+    padding-left: 1em;
+    font-size: 120%;
+    margin-bottom: 1em;
 }

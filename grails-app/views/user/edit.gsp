@@ -2,50 +2,50 @@
 <html>
     <head>
         <meta name="layout" content="main"/>
-        <title><g:meta name="app.name"/>: Edit user</title>
+        <title><g:meta name="app.name"/>: ${userToEdit.id ? 'Edit' : 'Create'} user</title>
     </head>
     <body>
+        <div class="pageinfo">
+            Edit ${userToEdit.id ? 'user' : 'new user'} details
+        </div>
         <g:form action="save">
-            <table>
-                <tr>
-                    <td><label for="">Username:</label></td>
-                    <td><g:textField name="userName" value="${userToEdit.userName}"/></td>
-                </tr>
-                <tr>
-                    <td><label for="password">Password:</label></td>
-                    <td><g:passwordField name="password" value="${password}"/></td>
-                </tr>
-                <tr>
-                    <td><label for="passwordConfirm">Confirm password:</label></td>
-                    <td><g:passwordField name="passwordConfirm" value="${passwordConfirm}"/></td>
-                </tr>
-                <tr>
-                    <td><label for="fullName">Full name:</label></td>
-                    <td><g:textField name="fullName" value="${userToEdit.fullName}"/></td>
-                </tr>
-                <tr>
-                    <td><label for="email">Email address:</label></td>
-                    <td><g:textField name="email" value="${userToEdit.email}"/></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><g:submitButton name="save" value="${userToEdit.id ? 'Save user' : 'Create user'}"/></td>
-                </tr>
-            </table>
+            <fieldset>
+                <div class="formfield">
+                    <label for="">Username:</label>
+                    <g:textField name="userName" value="${userToEdit.userName}"/>
+                </div>
+                <div class="formfield">
+                    <label for="password">Password:</label>
+                    <g:passwordField name="password" value="${password}"/>
+                </div>
+                <div class="formfield">
+                    <label for="passwordConfirm">Confirm password:</label>
+                    <g:passwordField name="passwordConfirm" value="${passwordConfirm}"/>
+                </div>
+                <div class="formfield">
+                    <label for="fullName">Full name:</label>
+                    <g:textField name="fullName" value="${userToEdit.fullName}"/>
+                </div>
+                <div class="formfield">
+                    <label for="email">Email address:</label>
+                    <g:textField name="email" value="${userToEdit.email}"/>
+                </div>
+                <div class="formfield">
+                    <label for="save"></label>
+                    <g:submitButton name="save" value="${userToEdit.id ? 'Save user' : 'Create user'}"/>
+                </div>
+            </fieldset>
         </g:form>
         
-        <div>
-            <g:if test="${flash.message}">
-                ${flash.message}
-            </g:if>
-        </div>
+        <g:if test="${flash.message}">
+            <div class="info">
+                    ${flash.message}
+            </div>
+        </g:if>
         <g:hasErrors bean="${userToEdit}">
-            <div>
-                User to edit has errors?
+            <div class="errors">
+                <g:renderErrors bean="${userToEdit}"/>
             </div>
         </g:hasErrors>
-        <div>
-            <g:renderErrors bean="${userToEdit}"/>
-        </div>
     </body>
 </html>

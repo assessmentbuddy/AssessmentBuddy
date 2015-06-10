@@ -5,7 +5,9 @@
         <title><g:meta name="app.name"/>: Log in</title>
     </head>
     <body>
-        Please enter your username and password:
+        <div class="pageinfo">
+            Please enter your username and password:
+        </div>
         <g:form action="login">
             <fieldset>
                 <div class="formfield">

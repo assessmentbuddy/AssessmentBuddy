@@ -7,8 +7,10 @@
     <body>
         Welcome to the home page!
         
-        <g:if test="${user.isAdmin()}">
-            <g:link controller="user" action="index">Manage users</g:link>
-        </g:if>
+        <nav>
+            <g:if test="${user.isAdmin()}">
+                <g:link controller="user" action="index" class="btnlink">Manage users</g:link>
+            </g:if>
+        </nav>
     </body>
 </html>
