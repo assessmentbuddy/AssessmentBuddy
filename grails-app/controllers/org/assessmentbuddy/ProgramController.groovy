@@ -5,7 +5,8 @@ import org.assessmentbuddy.model.Program
 class ProgramController {
 
     def index() {
-        // TODO: enumerate programs for editing
+        def programs = Program.list()
+        [ programs: programs ]
     }
     
     def create() {
@@ -33,5 +34,18 @@ class ProgramController {
         }
         
         [ programToEdit : programToEdit ]
+    }
+    
+    def save() {
+        def program = new Program(params)
+        if (!program.save()) {
+            flash.message = "Could not save program"
+            flash.programToEdit = program
+            redirect( action: 'edit' )
+            return
+        }
+        
+        flash.message = "Program ${program.name} saved successfully"
+        redirect( action: 'index' )
     }
 }

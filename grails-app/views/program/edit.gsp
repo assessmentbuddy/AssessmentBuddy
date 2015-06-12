@@ -25,5 +25,10 @@
                 ${flash.message}
             </div>
         </g:if>
+        <g:hasErrors bean="${flash.programToEdit}">
+            <div class="errors">
+                <g:renderErrors bean="${flash.programToEdit}"/>
+            </div>
+        </g:hasErrors>
     </body>
 </html>

@@ -6,16 +6,16 @@
     </head>
     <body>
         <div class="pageinfo">Manage users</div>
-        <nav>
-
-            <g:link action="create" class="btnlink">Add a new user</g:link>
-        </nav>
+        <g:link action="create" class="btnlink">Add a new user</g:link>
+        <div class="pageinfo">Edit existing users</div>
+        <g:each in="${users}" var="u">
+            <g:link action="edit" class="btnlink" id="${u.id}">${u.userName}</g:link>
+        </g:each>
+        <g:paginate total="${userCount}"/>
         <g:if test="${flash.message}">
             <div class="info">
                 ${flash.message}
             </div>
         </g:if>
-        
-        <g:paginate controller="user" action="index" total="${userCount}"/>
     </body>
 </html>

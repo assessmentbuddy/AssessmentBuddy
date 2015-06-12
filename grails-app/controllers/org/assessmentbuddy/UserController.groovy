@@ -8,7 +8,10 @@ class UserController {
     def index() {
         // For admin, show paginated list of users, otherwise, show current user
         def users = session.user.isAdmin() ? User.list(params) : [ session.user ]
-        def userCount = session.user.isAdmin() ? User.count() : 1
+        def userCount = users.size()
+        
+        println "Paginating ${userCount} user(s)"
+        
         [ users: users, userCount: userCount ]
     }
     
