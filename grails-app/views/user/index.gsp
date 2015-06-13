@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main"/>
+        <meta name="layout" content="main">
         <title><g:meta name="app.name"/>: Users</title>
     </head>
     <body>
