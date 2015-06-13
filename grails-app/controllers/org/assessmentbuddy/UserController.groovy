@@ -31,9 +31,7 @@ class UserController {
             // otherwise create a new one
             if (flash.userToEdit) {
                 // These are from previous edit form entries
-                userToEdit = flash.userToEdit
-                password = flash.password
-                passwordConfirm = flash.passwordConfirm
+                (userToEdit, password, passwordConfirm) = loadForReediting(flash)
             } else {
                 userToEdit = new User()
             }
@@ -41,7 +39,7 @@ class UserController {
             // Edit existing user
             if (flash.userToEdit) {
                 // User being edited, may indicate errors
-                userToEdit = flash.userToEdit
+                (userToEdit, password, passwordConfirm) = loadForReediting(flash)
             } else {
                 // Load user from database
                 userToEdit = User.get(params.id)
@@ -50,6 +48,11 @@ class UserController {
                 response.sendError(404)
                 return
             }
+        }
+        
+        // make sure userToEdit is attached if it is an existing User
+        if (userToEdit.id && !userToEdit.isAttached()) {
+            userToEdit.attach()
         }
         
         [
@@ -81,11 +84,22 @@ class UserController {
             userToSave = new User(userToEditParams) // create user object based on form params
         }
         
-        if (userToEditParams.password && userToEditParams.password != "") {
-            // FIXME: ensure that password and passwordConfirm match
+        if (params.password && params.password != "") {
+            // A password was specified
+            
+            println "Checking passwords: ${params.password}, ${params.passwordConfirm}"
+            
+            // Ensure that password confirmation field matches
+            if (params.password != params.passwordConfirm) {
+                // Confirmation field doesn't match, redirect to edit page
+                flash.message = "Password confirmation field does not match"
+                storeForReediting(flash, userToSave, params)
+                redirect( action: 'edit', id: userToSave.id )
+                return
+            }
 
             // Password was specified, hash it
-            userToSave.passwordHash = bcryptService.hashPassword(userToEditParams.password)
+            userToSave.passwordHash = bcryptService.hashPassword(params.password)
         } else if (params.id) {
             // An existing user is being edited: if no password was specified,
             // then keep the existing password
@@ -95,10 +109,8 @@ class UserController {
         
         if (!userToSave.save(flush: true)) {
             // Failed to save, redirect to edit page
-            flash.message = "Could not save user" // TODO: diagnostics
-            flash.password = userToEditParams.password
-            flash.passwordConfirm = userToEditParams.passwordConfirm
-            flash.userToEdit = userToSave
+            flash.message = "Could not save user"
+            storeForReediting(flash, userToSave, params)
             redirect( action: 'edit', id: userToSave.id )
             return
         }
@@ -110,5 +122,15 @@ class UserController {
         flash.message = "User ${userToSave.userName} saved successfully"
         flash.userToEdit = null
         redirect( action: "index" )
+    }
+    
+    private void storeForReediting(m, u, p) {
+        m.userToEdit = u
+        m.password = p.password
+        m.passwordConfirm = p.passwordConfirm
+    }
+    
+    private List loadForReediting(m) {
+        return [m.userToEdit, m.password, m.passwordConfirm]
     }
 }

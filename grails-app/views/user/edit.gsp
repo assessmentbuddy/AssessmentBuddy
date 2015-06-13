@@ -16,12 +16,12 @@
                     <g:textField class="right" name="userToEdit.userName" value="${userToEdit.userName}"/>
                 </div>
                 <div class="formfield">
-                    <label class="left" for="userToEdit.password">Password:</label>
-                    <g:passwordField class="right" name="userToEdit.password" value="${password}"/>
+                    <label class="left" for="password">Password:</label>
+                    <g:passwordField class="right" name="password" value="${password}"/>
                 </div>
                 <div class="formfield">
-                    <label class="left" for="userToEdit.passwordConfirm">Confirm password:</label>
-                    <g:passwordField class="right" name="userToEdit.passwordConfirm" value="${passwordConfirm}"/>
+                    <label class="left" for="passwordConfirm">Confirm password:</label>
+                    <g:passwordField class="right" name="passwordConfirm" value="${passwordConfirm}"/>
                 </div>
                 <div class="formfield">
                     <label class="left" for="userToEdit.fullName">Full name:</label>
