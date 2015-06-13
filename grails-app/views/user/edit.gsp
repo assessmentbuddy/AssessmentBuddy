@@ -5,7 +5,7 @@
         <title><g:meta name="app.name"/>: ${userToEdit.id ? 'Edit' : 'Create'} user</title>
     </head>
     <body>
-        <g:form action="save">
+        <g:form action="save" id="${params.id}">
             <fieldset>
                 <!-- user fields -->
                 <div class="pageinfo">

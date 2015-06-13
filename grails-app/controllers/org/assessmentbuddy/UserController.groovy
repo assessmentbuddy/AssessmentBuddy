@@ -39,7 +39,13 @@ class UserController {
             }
         } else {
             // Edit existing user
-            userToEdit = User.get(params.id)
+            if (flash.userToEdit) {
+                // User being edited, may indicate errors
+                userToEdit = flash.userToEdit
+            } else {
+                // Load user from database
+                userToEdit = User.get(params.id)
+            }
             if (!userToEdit) {
                 response.sendError(404)
                 return
@@ -57,32 +63,52 @@ class UserController {
     }
     
     def save() {
-        def userToEditParams = params["userToEdit"]
-        def roleToAddParams = params["roleToAdd"]
-        
+        def userToEditParams = params.userToEdit
+        def roleToAddParams = params.roleToAdd
+
         // attempt to save
-        User userToSave = new User(userToEditParams) // create user object based on form params
+        User userToSave
         
-        // FIXME: ensure that password and passwordConfirm match
-        
-        if (userToEditParams.password && userToEditParams.password != "") {
-            userToSave.passwordHash = bcryptService.hashPassword(userToEditParams.password)
+        if (params.id) {
+            // Updating an existing user: load from the database
+            // and then update the properties
+            userToSave = User.get(params.id.toLong())
+            userToSave.properties = userToEditParams
+            println "userToSave.id=${userToSave.id}"
+            println("userToSave.email=${userToSave.email}")
+        } else {
+            // Creating a new user
+            userToSave = new User(userToEditParams) // create user object based on form params
         }
         
-        if (!userToSave.save()) {
+        if (userToEditParams.password && userToEditParams.password != "") {
+            // FIXME: ensure that password and passwordConfirm match
+
+            // Password was specified, hash it
+            userToSave.passwordHash = bcryptService.hashPassword(userToEditParams.password)
+        } else if (params.id) {
+            // An existing user is being edited: if no password was specified,
+            // then keep the existing password
+            userToSave.passwordHash = User.get(params.id).passwordHash
+            println "Reusing existing password hash: ${userToSave.passwordHash}"
+        }
+        
+        if (!userToSave.save(flush: true)) {
             // Failed to save, redirect to edit page
             flash.message = "Could not save user" // TODO: diagnostics
             flash.password = userToEditParams.password
             flash.passwordConfirm = userToEditParams.passwordConfirm
             flash.userToEdit = userToSave
-            redirect( action: 'edit' )
+            redirect( action: 'edit', id: userToSave.id )
             return
         }
         
         // TODO: delete/add roles if requested
+        println "Role to add roleType: ${roleToAddParams['roleType']}"
         
         // save successful
         flash.message = "User ${userToSave.userName} saved successfully"
+        flash.userToEdit = null
         redirect( action: "index" )
     }
 }
