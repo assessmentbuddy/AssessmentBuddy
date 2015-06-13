@@ -57,24 +57,29 @@ class UserController {
     }
     
     def save() {
+        def userToEditParams = params["userToEdit"]
+        def roleToAddParams = params["roleToAdd"]
+        
         // attempt to save
-        User userToSave = new User(params) // create user object based on form params
+        User userToSave = new User(userToEditParams) // create user object based on form params
         
         // FIXME: ensure that password and passwordConfirm match
         
-        if (params.password && params.password != "") {
-            userToSave.passwordHash = bcryptService.hashPassword(params.password)
+        if (userToEditParams.password && userToEditParams.password != "") {
+            userToSave.passwordHash = bcryptService.hashPassword(userToEditParams.password)
         }
         
         if (!userToSave.save()) {
             // Failed to save, redirect to edit page
             flash.message = "Could not save user" // TODO: diagnostics
-            flash.password = params.password
-            flash.passwordConfirm = params.passwordConfirm
+            flash.password = userToEditParams.password
+            flash.passwordConfirm = userToEditParams.passwordConfirm
             flash.userToEdit = userToSave
             redirect( action: 'edit' )
             return
         }
+        
+        // TODO: delete/add roles if requested
         
         // save successful
         flash.message = "User ${userToSave.userName} saved successfully"
