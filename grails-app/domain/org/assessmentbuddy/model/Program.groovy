@@ -21,6 +21,10 @@ package org.assessmentbuddy.model
  */
 class Program {
     String name
+    
+    String toString() {
+        name
+    }
 
     static hasMany = [ outcomes : Outcome, courses : Course, rubrics : Rubric ]
     

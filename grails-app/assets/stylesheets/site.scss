@@ -81,14 +81,19 @@ fieldset {
 	margin-bottom: 1ex;
 }
 
-.formfield label {
+.formfield .left {
 	display: inline-block;
 	width: 10em;
 	text-align: right;
 }
 
-.formfield input {
+.formfield .right {
 	margin-left: 1em;
+}
+
+.formfield div.right {
+    padding: 0px;
+    border: 0px;
 }
 
 a.btnlink {
@@ -118,4 +123,11 @@ a.btnlink:hover {
     padding-left: 1em;
     font-size: 120%;
     margin-bottom: 1em;
+}
+
+.roleType, .scope {
+    background: #ddd;
+    border: 1px solid silver;
+    border-radius: 2pt;
+    padding: 1pt 8pt;
 }

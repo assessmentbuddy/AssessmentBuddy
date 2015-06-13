@@ -1,5 +1,7 @@
 package org.assessmentbuddy
 
+import org.assessmentbuddy.model.Program
+import org.assessmentbuddy.model.Role
 import org.assessmentbuddy.model.User
 
 class UserController {
@@ -44,7 +46,14 @@ class UserController {
             }
         }
         
-        [ userToEdit: userToEdit, password: password, passwordConfirm: passwordConfirm ]
+        [
+            userToEdit: userToEdit,
+            password: password,
+            passwordConfirm: passwordConfirm,
+            roleTypes: Role.RoleType.values(),
+            scopes: Role.Scope.values(),
+            programs: Program.list().sort { it.name }
+        ]
     }
     
     def save() {

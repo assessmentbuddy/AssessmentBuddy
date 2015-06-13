@@ -11,16 +11,16 @@
         <g:form action="login">
             <fieldset>
                 <div class="formfield">
-                    <label for="userName">Username:</label>
-                    <g:textField name="userName"/>
+                    <label class="left" for="userName">Username:</label>
+                    <g:textField class="right" name="userName"/>
                 </div>
                 <div class="formfield">
-                    <label for="password">Password:</label>
-                    <g:passwordField name="password"/>
+                    <label class="left" for="password">Password:</label>
+                    <g:passwordField class="right" name="password"/>
                 </div>
                 <div class="formfield">
-                    <label for="login"></label>
-                    <g:submitButton name="login" value="Log in"/>
+                    <label class="left" for="login"></label>
+                    <g:submitButton class="right" name="login" value="Log in"/>
                 </div>
             </fieldset>
         </g:form>
