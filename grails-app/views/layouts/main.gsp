@@ -20,8 +20,8 @@
                 </div>
                 &nbsp;
                 <div id="navright">
-                    <g:link controller="home" action="index">Home</g:link>
                     <g:if test="${session.user}">
+                        <g:link controller="home" action="index">Home</g:link>
                         | <g:link controller="login" action="logout">Log out</g:link>
                     </g:if>
                 </div>
