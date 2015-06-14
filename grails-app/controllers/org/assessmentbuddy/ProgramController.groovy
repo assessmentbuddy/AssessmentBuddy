@@ -37,11 +37,25 @@ class ProgramController {
     }
     
     def save() {
-        def program = new Program(params)
-        if (!program.save()) {
+        def program
+        
+        if (params.id) {
+            // Editing existing program
+            program = Program.get(params.id.toLong())
+            if (!program) {
+                response.sendError(404)
+                return
+            }
+            program.properties = params
+        } else {
+            // Creating new program
+            program = new Program(params)
+        }
+        
+        if (!program.save(flush: true)) {
             flash.message = "Could not save program"
             flash.programToEdit = program
-            redirect( action: 'edit' )
+            redirect( action: 'edit', id: program.id )
             return
         }
         

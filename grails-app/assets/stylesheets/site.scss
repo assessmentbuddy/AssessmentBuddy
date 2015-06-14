@@ -96,6 +96,18 @@ fieldset {
     border: 0px;
 }
 
+.formsubmit {
+    margin-top: 4ex;
+    text-align: center;
+    border-top: 2pt solid $headerBg;
+    padding: 1ex 0;
+}
+
+.formsubmit input {
+    min-width: 10em;
+    font-size: 120%;
+}
+
 a.btnlink {
     display: block;
     background: $btn;
@@ -123,6 +135,14 @@ a.btnlink:hover {
     padding-left: 1em;
     font-size: 120%;
     margin-bottom: 1em;
+}
+
+.formsection {
+    background: $headerBg;
+    color: white;
+    text-align: center;
+    padding: 1pt 0;
+    margin: 2ex 0;
 }
 
 .roleType, .scope, .program {

@@ -5,15 +5,15 @@
         <title><g:meta name="app.name"/>: ${programToEdit.id ? 'Edit' : 'Create'} program</title>
     </head>
     <body>
-        <div class="pageinfo">${programToEdit.id ? 'Create new' : 'Edit'} program</div>
+        <div class="pageinfo">${programToEdit.id ? "Edit program ${programToEdit.name}" : 'Create new program'}</div>
 
-        <g:form action="save">
+        <g:form action="save" id="${programToEdit.id}">
             <fieldset>
                 <div class="formfield">
                     <label class="left" for="name">Program name:</label>
                     <g:textField class="right" name="name" value="${programToEdit.name}" size="40"/>
                 </div>
-                <div class="formfield">
+                <div class="formsubmit">
                     <label class="left" for="save"></label>
                     <g:submitButton class="right" name="save" value="${programToEdit.id ? 'Edit program' : 'Save program'}"/>
                 </div>

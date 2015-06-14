@@ -5,10 +5,11 @@
         <title><g:meta name="app.name"/>: ${userToEdit.id ? 'Edit' : 'Create'} user</title>
     </head>
     <body>
+        <div class="pageinfo">Edit ${userToEdit.id ? "user ${userToEdit.userName}" : 'New user'}</div>
         <g:form action="save" id="${params.id}">
             <fieldset>
                 <!-- user fields -->
-                <div class="pageinfo">
+                <div class="formsection">
                     Edit ${userToEdit.id ? 'user' : 'new user'} details
                 </div>
                 <div class="formfield">
@@ -33,7 +34,7 @@
                 </div>
                 
                 <!-- roles (only if user is an administrator) -->
-                <div class="pageinfo">
+                <div class="formsection">
                     Edit roles
                 </div>
                 <g:if test="${session.user.isAdmin()}">
@@ -69,8 +70,7 @@
                     </div>
                 </g:if>
                 
-                <div class="formfield">
-                    <label class="left" for="save"></label>
+                <div class="formsubmit">
                     <g:submitButton class="right" name="save" value="${userToEdit.id ? 'Save user' : 'Create user'}"/>
                 </div>
             </fieldset>

@@ -6,7 +6,7 @@
     </head>
     <body>
         <div class="pageinfo">
-            Please enter your username and password:
+            Please enter your username and password
         </div>
         <g:form action="login">
             <fieldset>
@@ -18,8 +18,7 @@
                     <label class="left" for="password">Password:</label>
                     <g:passwordField class="right" name="password"/>
                 </div>
-                <div class="formfield">
-                    <label class="left" for="login"></label>
+                <div class="formsubmit">
                     <g:submitButton class="right" name="login" value="Log in"/>
                 </div>
             </fieldset>

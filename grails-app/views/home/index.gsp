@@ -5,13 +5,11 @@
         <title><g:meta name="app.name"/>: Home</title>
     </head>
     <body>
-        Welcome to the home page!
+        <div class="pageinfo">Welcome to AssessmentBuddy!</div>
         
-        <nav>
-            <g:if test="${user.isAdmin()}">
-                <g:link controller="user" action="index" class="btnlink">Manage users</g:link>
-                <g:link controller="program" action="index" class="btnlink">Manage programs</g:link>
-            </g:if>
-        </nav>
+        <g:if test="${user.isAdmin()}">
+            <g:link controller="user" action="index" class="btnlink">Manage users</g:link>
+            <g:link controller="program" action="index" class="btnlink">Manage programs</g:link>
+        </g:if>
     </body>
 </html>
