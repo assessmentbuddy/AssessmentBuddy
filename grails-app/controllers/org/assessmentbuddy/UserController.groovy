@@ -118,6 +118,24 @@ class UserController {
         // TODO: delete/add roles if requested
         println "Role to add roleType: ${roleToAddParams['roleType']}"
         
+        // delete roles if requested
+        def roleIds = User.get(userToSave.id).roles.collect { it.id }
+        int deletedRoles = 0
+        roleIds.each { roleId ->
+            def deleteCheck = params["rolesToDelete.${roleId}"]
+            if (deleteCheck) {
+                println "Delete role ${roleId}"
+                def role = Role.get(roleId)
+                if (role) {
+                    userToSave.removeFromRoles(role)
+                    deletedRoles++
+                }
+            }
+        }
+        if (deletedRoles > 0) {
+            userToSave.save(flush: true)
+        }
+        
         // save successful
         flash.message = "User ${userToSave.userName} saved successfully"
         flash.userToEdit = null
