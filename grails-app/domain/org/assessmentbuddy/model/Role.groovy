@@ -23,14 +23,24 @@ class Role {
         /** A reporter can add measures and view data.. */
         REPORTER,
         /** A viewer can view data. */
-        VIEWER,
+        VIEWER;
+        
+        String toString() {
+            String s = name();
+            return s[0] + s.substring(1).toLowerCase();
+        }
     }
     
     enum Scope {
         /** Role is limited to a specified program. */
         ONE_PROGRAM,
         /** Role extends to all programs. */
-        ALL_PROGRAMS,
+        ALL_PROGRAMS;
+        
+        String toString() {
+            String s = name().replace('_', ' ');
+            return s[0] + s.substring(1).toLowerCase();
+        }
     }
     
     RoleType roleType

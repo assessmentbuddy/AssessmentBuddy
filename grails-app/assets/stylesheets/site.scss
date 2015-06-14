@@ -125,7 +125,9 @@ a.btnlink:hover {
     margin-bottom: 1em;
 }
 
-.roleType, .scope {
+.roleType, .scope, .program {
+    font-variant: small-caps;
+    font-size: 90%;
     background: #ddd;
     border: 1px solid silver;
     border-radius: 2pt;

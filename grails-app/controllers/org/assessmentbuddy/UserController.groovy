@@ -66,6 +66,9 @@ class UserController {
     }
     
     def save() {
+        // FIXME: permissions check (make sure logged in user is an admid
+        // or is the same as the user being edited)
+        
         def userToEditParams = params.userToEdit
         def roleToAddParams = params.roleToAdd
 
@@ -115,25 +118,40 @@ class UserController {
             return
         }
         
-        // TODO: delete/add roles if requested
-        println "Role to add roleType: ${roleToAddParams['roleType']}"
-        
-        // delete roles if requested
-        def roleIds = User.get(userToSave.id).roles.collect { it.id }
-        int deletedRoles = 0
-        roleIds.each { roleId ->
-            def deleteCheck = params["rolesToDelete.${roleId}"]
-            if (deleteCheck) {
-                println "Delete role ${roleId}"
-                def role = Role.get(roleId)
-                if (role) {
-                    userToSave.removeFromRoles(role)
-                    deletedRoles++
+        if (session.user.isAdmin()) {
+            // delete roles if requested
+            def roleIds = User.get(userToSave.id).roles.collect { it.id }
+            int deletedRoles = 0
+            roleIds.each { roleId ->
+                def deleteCheck = params["rolesToDelete.${roleId}"]
+                if (deleteCheck) {
+                    println "Delete role ${roleId}"
+                    def role = Role.get(roleId)
+                    if (role) {
+                        println "Deleting role ${roleId} from user ${userToSave.id}"
+                        userToSave.removeFromRoles(role)
+                        role.delete()
+                        deletedRoles++
+                    }
                 }
             }
-        }
-        if (deletedRoles > 0) {
-            userToSave.save(flush: true)
+            if (deletedRoles > 0) {
+                userToSave.save(flush: true)
+            }
+
+            // add role if requested
+            if (roleToAddParams.roleType && roleToAddParams.scope && roleToAddParams.program) {
+                // roleType and scope are enum names
+                def roleType = Role.RoleType.valueOf(roleToAddParams.roleType)
+                def scope = Role.Scope.valueOf(roleToAddParams.scope)
+
+                // program is a program id
+                def program = Program.get(roleToAddParams.program.toLong())
+
+                def roleToAdd = new Role(roleType: roleType, scope: scope, program: program)
+                userToSave.addToRoles(roleToAdd)
+                userToSave.save(flush: true)
+            }
         }
         
         // save successful

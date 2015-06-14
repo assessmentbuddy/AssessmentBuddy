@@ -41,7 +41,7 @@
                         <div class="formfield">
                             <label class="left">Current role:</label>
                             <span class="right">
-                                <span class="roleType">${r.roleType}</span> <span class="scope">${r.scope}</span>
+                                <span class="roleType">${r.roleType}</span> <span class="scope">${r.scope}</span> <span class="program">${r.program.name}</span>
                                 <g:checkBox name="rolesToDelete.${r.id}" value="${false}"/>
                                 <label for="rolesToDelete.${r.id}">Delete</label>
                             </span>
@@ -50,11 +50,20 @@
                     <div class="formfield">
                         <label class="left">New role:</label>
                         <span class="right">
-                            <g:select name="roleToAdd.roleType" from="${roleTypes}"
+                            <g:select
+                                name="roleToAdd.roleType"
+                                from="${roleTypes}"
+                                optionKey="${{it?.name()}}"
                                 noSelection="['' : 'Select role type']"/>
-                            <g:select name="roleToAdd.scope" from="${scopes}"
+                            <g:select
+                                name="roleToAdd.scope"
+                                from="${scopes}"
+                                optionKey="${{it?.name()}}"
                                 noSelection="['' : 'Select scope']"/>
-                            <g:select name="roleToAdd.program" from="${programs}"
+                            <g:select
+                                name="roleToAdd.program"
+                                from="${programs}"
+                                optionKey="${{it?.id}}"
                                 noSelection="['' : 'Select program']"/>
                         </span>
                     </div>
