@@ -38,11 +38,15 @@
                     Edit roles
                 </div>
                 <g:if test="${session.user.isAdmin()}">
-                    <g:each in="${userToEdit.roles}" var="r">
+                    <g:each in="${userToEdit.roles.sort { it.id }}" var="r">
                         <div class="formfield">
                             <label class="left">Current role:</label>
                             <span class="right">
-                                <span class="roleType">${r.roleType}</span> <span class="scope">${r.scope}</span> <span class="program">${r.program.name}</span>
+                                <span class="roleType">${r.roleType}</span>
+                                <span class="scope">${r.scope}</span>
+                                <g:if test="${r.program}">
+                                    <span class="program">${r.program.name}</span>
+                                </g:if>
                                 <g:checkBox name="rolesToDelete.${r.id}" value="${false}"/>
                                 <label for="rolesToDelete.${r.id}">Delete</label>
                             </span>

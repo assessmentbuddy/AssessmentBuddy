@@ -140,13 +140,26 @@ class UserController {
             }
 
             // add role if requested
-            if (roleToAddParams.roleType && roleToAddParams.scope && roleToAddParams.program) {
+            if (roleToAddParams.roleType && roleToAddParams.scope) {
                 // roleType and scope are enum names
                 def roleType = Role.RoleType.valueOf(roleToAddParams.roleType)
                 def scope = Role.Scope.valueOf(roleToAddParams.scope)
 
                 // program is a program id
-                def program = Program.get(roleToAddParams.program.toLong())
+                def program = roleToAddParams.program ? Program.get(roleToAddParams.program.toLong()) : null
+                
+                if (scope == Role.Scope.ONE_PROGRAM && !program) {
+                    flash.message = "A program must be specified for a 'One program' role"
+                    storeForReediting(flash, userToSave, params)
+                    redirect(action: 'edit', id: userToSave.id)
+                    return
+                }
+                
+                if (scope == Role.Scope.ALL_PROGRAMS) {
+                    // We don't want a program to be specified if the scope is
+                    // ALL_PROGRAMS
+                    program = null
+                }
 
                 def roleToAdd = new Role(roleType: roleType, scope: scope, program: program)
                 userToSave.addToRoles(roleToAdd)
