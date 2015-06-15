@@ -59,7 +59,7 @@ body {
 	color: white;
 }
 
-.footer a:visited, navbar a:visited {
+.footer a:visited, .navbar a:visited {
 	color: white;
 }
 
@@ -67,8 +67,8 @@ body {
 	background: black;
 }
 
-.footer img {
-    vertical-align: -12px;
+.footer img.logo {
+    vertical-align: middle;
 }
 
 .body {
