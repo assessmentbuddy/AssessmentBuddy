@@ -22,6 +22,22 @@
                 &nbsp;
                 <div id="navright">
                     <g:if test="${session.user}">
+                        <g:if test="${session.availablePrograms}">
+                            <span class="programsel">
+                                <g:form controller="program" action="select">
+                                        Program:
+                                        <g:select 
+                                            name="program"
+                                            from="${session.availablePrograms}"
+                                            optionKey="id"
+                                            value="${session.program ? session.program.id : '-1'}"
+                                            noSelection="['-1' : 'No program selected']"
+                                            />
+                                        <g:hiddenField name="where" value="${request.forwardURI - request.contextPath}"/>
+                                        <g:submitButton name="submit" value="Select"/>
+                                </g:form>
+                            </span> |
+                        </g:if>
                         <g:link controller="home" action="index">Home</g:link>
                         | <g:link controller="login" action="logout">Log out</g:link>
                     </g:if>

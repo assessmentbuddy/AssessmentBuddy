@@ -62,4 +62,23 @@ class ProgramController {
         flash.message = "Program ${program.name} saved successfully"
         redirect( action: 'index' )
     }
+    
+    // This action allows the user to change the currently-selected
+    // program in his/her session.
+    def select() {
+        def progId = params?.program?.toLong()
+        if (!progId || progId < 0) {
+            session.program = null
+        } else {
+            def program = Program.get(progId)
+            session.program = session.availablePrograms.contains(program) ? program : null
+        }
+        
+        // Redirect back to original page
+        if (params.where) {
+            redirect(uri: params.where)
+        } else {
+            redirect(controller: "home", action: "index")
+        }
+    }
 }

@@ -41,6 +41,13 @@ body {
 .navbar {
 	background: $navbar;
 	color: white;
+        padding: 1ex 0;
+}
+
+/* A form is embedded inline into the navigation bar
+ * to allow the user to select/change the current program */
+.navbar span.programsel form {
+    display: inline;
 }
 
 #navleft {

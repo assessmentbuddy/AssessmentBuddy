@@ -38,7 +38,7 @@
                     Edit roles
                 </div>
                 <g:if test="${session.user.isAdmin()}">
-                    <g:each in="${userToEdit.roles.sort { it.id }}" var="r">
+                    <g:each in="${userToEdit.roles?.sort { it.id }}" var="r">
                         <div class="formfield">
                             <label class="left">Current role:</label>
                             <span class="right">
