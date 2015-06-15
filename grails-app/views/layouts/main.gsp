@@ -30,7 +30,8 @@
                 <g:layoutBody/>
             </div>
             <div class="footer">
-                AssessmentBuddy: An <a href="https://github.com/assessmentbuddy/AssessmentBuddy">open-source assessment tool</a>
+                AssessmentBuddy: An <a class="projlink" href="https://github.com/assessmentbuddy/AssessmentBuddy">open-source assessment tool</a> |
+                <a href="http://www.gnu.org/licenses/agpl-3.0.en.html"><asset:image src="agplv3-88x31-whitebg.png"/></a>
             </div>
         </div>
     </body>

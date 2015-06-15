@@ -63,8 +63,12 @@ body {
 	color: white;
 }
 
-.footer a:hover, .navbar a:hover {
+.footer a.projlink:hover, .navbar a:hover {
 	background: black;
+}
+
+.footer img {
+    vertical-align: -12px;
 }
 
 .body {
