@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
     <head>
         <meta name="layout" content="main">
@@ -12,7 +11,7 @@
             <fieldset>
                 <div class="formfield">
                     <label class="left" for="userName">Username:</label>
-                    <g:textField class="right" name="userName"/>
+                    <g:textField class="right" name="userName" id="focuselt"/>
                 </div>
                 <div class="formfield">
                     <label class="left" for="password">Password:</label>

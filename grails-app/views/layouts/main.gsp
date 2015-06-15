@@ -5,6 +5,7 @@
         <title><g:layoutTitle default="AssessmentBuddy"/></title>
         <asset:stylesheet href="site.css"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <asset:javascript src="assessmentbuddy.js"/>
         <g:layoutHead/>
     </head>
     <body>
