@@ -52,4 +52,11 @@ class Role {
     static constraints = {
         program nullable: true
     }
+    
+    boolean isAdminFor(Program aProgram) {
+        if (roleType != RoleType.ADMIN) {
+            return false
+        }
+        return (scope == Scope.ALL_PROGRAMS || (scope == Scope.ONE_PROGRAM && program.id == aProgram.id))
+    }
 }

@@ -28,4 +28,8 @@ class Outcome {
         shortName size: 1..40
         description size: 1..255
     }
+    
+    static List getOutcomesFor(Program aProgram) {
+        return where { program == aProgram }.list().sort { it.shortName }
+    }
 }
