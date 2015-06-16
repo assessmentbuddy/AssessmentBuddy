@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
     <head>
         <meta name="layout" content="main">
@@ -14,7 +13,7 @@
                 </div>
                 <div class="formfield">
                     <label class="left" for="userToEdit.userName">Username:</label>
-                    <g:textField class="right" name="userToEdit.userName" value="${userToEdit.userName}"/>
+                    <g:textField class="right" name="userToEdit.userName" value="${userToEdit.userName}" id="focuselt"/>
                 </div>
                 <div class="formfield">
                     <label class="left" for="password">Password:</label>

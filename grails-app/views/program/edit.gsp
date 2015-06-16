@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
     <head>
         <meta name="layout" content="main">
@@ -11,7 +10,7 @@
             <fieldset>
                 <div class="formfield">
                     <label class="left" for="name">Program name:</label>
-                    <g:textField class="right" name="name" value="${programToEdit.name}" size="40"/>
+                    <g:textField class="right" name="name" value="${programToEdit.name}" size="40" id="focuselt"/>
                 </div>
                 <div class="formsubmit">
                     <label class="left" for="save"></label>
