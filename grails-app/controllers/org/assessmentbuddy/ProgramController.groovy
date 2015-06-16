@@ -70,8 +70,11 @@ class ProgramController {
         if (!progId || progId < 0) {
             session.program = null
         } else {
+            println "Attempting to select program ${progId}"
             def program = Program.get(progId)
-            session.program = session.availablePrograms.contains(program) ? program : null
+            println "Found? ${program?.name}"
+            session.program = session.availablePrograms.any { it.id == program.id } ? program : null
+            println "Selected: ${session.program?.name}"
         }
         
         // Redirect back to original page
