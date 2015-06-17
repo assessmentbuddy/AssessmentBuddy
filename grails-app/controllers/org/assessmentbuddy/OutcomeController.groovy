@@ -49,8 +49,53 @@ class OutcomeController {
     }
     
     def save() {
-        flash.message = "In theory we should have saved the outcome"
+        // Make sure a program is selected
+        if (!session.program) {
+            flash.message = "A program must be selected"
+            flash.outcomeToEdit = new Outcome(params)
+            redirect(action: 'edit', id: params.id)
+            return
+        }
         
+        // Make sure the user is an admin in the selected program
+        if (!session.user.hasAdminRightsIn(session.program)) {
+            flash.message = "User ${session.user.userName} doesn't have permission to create outcomes in ${session.program.name}"
+            flash.outcomeToEdit = new Outcome(params)
+            redirect(action: 'edit', id: params.id)
+            return
+        }
+
+        def outcomeToSave
+        if (params.id) {
+            // Modifying existing program
+            outcomeToSave = Outcome.get(params.id.toLong())
+            if (!outcomeToSave) {
+                response.sendError(404)
+                return
+            }
+            // Make sure it really belongs to the current program
+            if (!outcomeToSave.program || outcomeToSave.program.id != session.program.id) {
+                flash.message = "Outcome ${outcomeToSave.id} doesn't belong to program ${session.program.id}?"
+                flash.outcomeToEdit = outcomeToSave
+                redirect(action: 'edit', id: params.id)
+                return
+            }
+            // Looks like we can proceed
+            outcomeToSave.properties = params
+        } else {
+            // Saving new program
+            outcomeToSave = new Outcome(params)
+            outcomeToSave.program = session.program
+        }
+        
+        if (!outcomeToSave.save(flush: true)) {
+            flash.message = "Could not save outcome"
+            flash.outcomeToEdit = outcomeToSave
+            redirect(action: 'edit', id: params.id)
+            return
+        }
+ 
+        flash.message = "Outcome saved successfully"
         redirect( action: 'index' )
     }
 }
