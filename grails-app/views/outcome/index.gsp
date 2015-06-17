@@ -12,12 +12,12 @@
             <div class="pageinfo">Edit existing outcomes in ${session.program.name}</div>
 
             <g:each in="${outcomes}" var="outcome">
-                <ab:conditionalLink
+                <g:link
                     enabled="${session.program != null}"
                     class="btnlink"
                     controller="outcome"
                     action="edit"
-                    id="${outcome.id}">${outcome.toDisplay()}</ab:conditionalLink>
+                    id="${outcome.id}">${outcome.toDisplay()}</g:link>
             </g:each>
         </g:if>
         
