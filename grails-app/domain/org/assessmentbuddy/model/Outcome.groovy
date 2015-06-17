@@ -32,4 +32,8 @@ class Outcome {
     static List getOutcomesFor(Program aProgram) {
         return where { program == aProgram }.list().sort { it.shortName }
     }
+    
+    String toDisplay() {
+        return shortName + " — " + description;
+    }
 }

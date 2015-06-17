@@ -4,7 +4,7 @@
         <title><g:meta name="app.name"/>: ${outcomeToEdit.id ? 'Edit' : 'Create'} outcome</title>
     </head>
     <body>
-        <div class="pageinfo">${outcomeToEdit.id ? "Edit outcome ${outcomeToEdit.name}" : 'Create new outcome'}</div>
+        <div class="pageinfo">${outcomeToEdit.id ? "Edit outcome ${outcomeToEdit.toDisplay()}" : 'Create new outcome'}</div>
 
         <g:form action="save" id="${outcomeToEdit.id}">
             <fieldset>

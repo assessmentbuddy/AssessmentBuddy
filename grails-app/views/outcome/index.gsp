@@ -8,16 +8,18 @@
         
         <g:link class="btnlink" controller="outcome" action="create">Create new outcome</g:link>
         
-        <div class="pageinfo">Edit existing outcomes</div>
-        
-        <g:each in="${outcomes}" var="outcome">
-            <ab:conditionalLink
-                enabled="${session.program != null}"
-                class="btnlink"
-                controller="outcome"
-                action="edit"
-                id="${outcome.id}">${outcome.shortName} &mdash; ${outcome.description}</ab:conditionalLink>
-        </g:each>
+        <g:if test="${session.program}">
+            <div class="pageinfo">Edit existing outcomes in ${session.program.name}</div>
+
+            <g:each in="${outcomes}" var="outcome">
+                <ab:conditionalLink
+                    enabled="${session.program != null}"
+                    class="btnlink"
+                    controller="outcome"
+                    action="edit"
+                    id="${outcome.id}">${outcome.shortName} &mdash; ${outcome.description}</ab:conditionalLink>
+            </g:each>
+        </g:if>
         
         <g:if test="${flash.message}">
             <div class="info">
