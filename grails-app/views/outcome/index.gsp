@@ -13,7 +13,6 @@
 
             <g:each in="${outcomes}" var="outcome">
                 <g:link
-                    enabled="${session.program != null}"
                     class="btnlink"
                     controller="outcome"
                     action="edit"
