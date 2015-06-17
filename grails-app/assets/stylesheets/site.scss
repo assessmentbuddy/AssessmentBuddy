@@ -119,14 +119,21 @@ fieldset {
     font-size: 120%;
 }
 
-a.btnlink {
-    display: block;
-    background: $btn;
+a.btnlink, div.disabledbtnlink {
     padding: 1ex;
     color: black;
-    text-decoration: none;
     margin: 1ex 2em;
     overflow: hidden;
+}
+
+a.btnlink {
+    display: block;
+    text-decoration: none;
+    background: $btn;
+}
+
+div.disabledbtnlink {
+    background: silver;
 }
 
 a.btnlink:visited {

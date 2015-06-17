@@ -17,7 +17,7 @@
                     class="btnlink"
                     controller="outcome"
                     action="edit"
-                    id="${outcome.id}">${outcome.shortName} &mdash; ${outcome.description}</ab:conditionalLink>
+                    id="${outcome.id}">${outcome.toDisplay()}</ab:conditionalLink>
             </g:each>
         </g:if>
         
