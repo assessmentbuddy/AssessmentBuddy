@@ -28,4 +28,18 @@ class Indicator {
         shortName size: 1..40
         description size: 1..255
     }
+    
+    static List getIndicatorsFor(Program program) {
+        return executeQuery(
+            "  select i from Indicator i, Outcome o " +
+            "   where i.outcome = o " +
+            "     and o.program.id = :programId " +
+            "order by o.shortName, i.shortName",
+            [ programId: program.id ]
+        )
+    }
+    
+    String toDisplay() {
+        return outcome.shortName + "." + shortName + " — " + description
+    }
 }
