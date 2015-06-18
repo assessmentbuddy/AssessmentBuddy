@@ -33,10 +33,11 @@
                 </div>
                 
                 <!-- roles (only if user is an administrator) -->
-                <div class="formsection">
-                    Edit roles
-                </div>
                 <g:if test="${session.user.isAdmin()}">
+                    <div class="formsection">
+                        Edit roles
+                    </div>
+                    <g:hiddenField name="roleIds" value="${userToEdit.roles?.join(' ')}"/>
                     <g:each in="${userToEdit.roles?.sort { it.id }}" var="r">
                         <div class="formfield">
                             <label class="left">Current role:</label>

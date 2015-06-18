@@ -1,11 +1,14 @@
 package org.assessmentbuddy
 
+import org.assessmentbuddy.model.BaseException
+import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.Program
 import org.assessmentbuddy.model.Role
 import org.assessmentbuddy.model.User
 
 class UserController {
     def bcryptService
+    def userService
 
     def index() {
         // For admin, show paginated list of users, otherwise, show current user
@@ -42,11 +45,12 @@ class UserController {
                 (userToEdit, password, passwordConfirm) = loadForReediting(flash)
             } else {
                 // Load user from database
-                userToEdit = User.get(params.id)
-            }
-            if (!userToEdit) {
-                response.sendError(404)
-                return
+                try {
+                    userToEdit = userService.findUserForId(params.id.toLong())
+                } catch (NoSuchIdException e) {
+                    response.sendError(404)
+                    return
+                }
             }
         }
         
@@ -66,27 +70,13 @@ class UserController {
     }
     
     def save() {
-        // FIXME: permissions check (make sure logged in user is an admid
-        // or is the same as the user being edited)
-        
         def userToEditParams = params.userToEdit
         def roleToAddParams = params.roleToAdd
 
-        // attempt to save
-        User userToSave
-        
-        if (params.id) {
-            // Updating an existing user: load from the database
-            // and then update the properties
-            userToSave = User.get(params.id.toLong())
-            userToSave.properties = userToEditParams
-            println "userToSave.id=${userToSave.id}"
-            println("userToSave.email=${userToSave.email}")
-        } else {
-            // Creating a new user
-            userToSave = new User(userToEditParams) // create user object based on form params
-        }
-        
+        // FIXME: permissions check (make sure logged in user is an admin
+        // or is the same as the user being edited)
+
+        // If a password was specified, make sure the confirmation password matches
         if (params.password && params.password != "") {
             // A password was specified
             
@@ -96,79 +86,44 @@ class UserController {
             if (params.password != params.passwordConfirm) {
                 // Confirmation field doesn't match, redirect to edit page
                 flash.message = "Password confirmation field does not match"
-                storeForReediting(flash, userToSave, params)
+                storeForReediting(flash, new User(userToEditParams), params)
                 redirect( action: 'edit', id: userToSave.id )
                 return
             }
-
-            // Password was specified, hash it
-            userToSave.passwordHash = bcryptService.hashPassword(params.password)
-        } else if (params.id) {
-            // An existing user is being edited: if no password was specified,
-            // then keep the existing password
-            userToSave.passwordHash = User.get(params.id).passwordHash
-            println "Reusing existing password hash: ${userToSave.passwordHash}"
         }
         
-        if (!userToSave.save(flush: true)) {
-            // Failed to save, redirect to edit page
-            flash.message = "Could not save user"
-            storeForReediting(flash, userToSave, params)
-            redirect( action: 'edit', id: userToSave.id )
+        // If a new user is being created, make sure that a password was specified
+        if (!params.id && (!params.password || params.password == '')) {
+            flash.message = "Please specify a password"
+            storeForReediting(flash, new User(userToEditParams), params)
+            redirect( action: 'edit' )
             return
         }
         
-        if (session.user.isAdmin()) {
-            // delete roles if requested
-            def roleIds = User.get(userToSave.id).roles.collect { it.id }
-            int deletedRoles = 0
-            roleIds.each { roleId ->
-                def deleteCheck = params["rolesToDelete.${roleId}"]
-                if (deleteCheck) {
-                    println "Delete role ${roleId}"
-                    def role = Role.get(roleId)
-                    if (role) {
-                        println "Deleting role ${roleId} from user ${userToSave.id}"
-                        userToSave.removeFromRoles(role)
-                        role.delete()
-                        deletedRoles++
-                    }
-                }
-            }
-            if (deletedRoles > 0) {
-                userToSave.save(flush: true)
-            }
+        // Get role ids (which are in a hidden form parameter),
+        // so we know which roles might have been selected for
+        // deletion
+        def roleIds = []
+        if (params.roleIds) {
+            roleIds = params.roleIds.split(/\s+/).collect { it.toLong() }
+        }
 
-            // add role if requested
-            if (roleToAddParams.roleType && roleToAddParams.scope) {
-                // roleType and scope are enum names
-                def roleType = Role.RoleType.valueOf(roleToAddParams.roleType)
-                def scope = Role.Scope.valueOf(roleToAddParams.scope)
-
-                // program is a program id
-                def program = roleToAddParams.program ? Program.get(roleToAddParams.program.toLong()) : null
-                
-                if (scope == Role.Scope.ONE_PROGRAM && !program) {
-                    flash.message = "A program must be specified for a 'One program' role"
-                    storeForReediting(flash, userToSave, params)
-                    redirect(action: 'edit', id: userToSave.id)
-                    return
-                }
-                
-                if (scope == Role.Scope.ALL_PROGRAMS) {
-                    // We don't want a program to be specified if the scope is
-                    // ALL_PROGRAMS
-                    program = null
-                }
-
-                def roleToAdd = new Role(roleType: roleType, scope: scope, program: program)
-                userToSave.addToRoles(roleToAdd)
-                userToSave.save(flush: true)
-            }
+        // Attempt to persist changes to user and roles
+        try {
+            userService.saveUserAndUpdateRoles(params?.id, params?.password, userToEditParams, roleIds, roleToAddParams)
+        } catch (NoSuchIdException e) {
+            response.sendError(404)
+            return
+        } catch (BaseException e) {
+            // Failed to save, redirect to edit page
+            flash.message = "Could not save user"
+            storeForReediting(flash, e.getBean(), params)
+            redirect( action: 'edit', id: params.id )
+            return
         }
         
         // save successful
-        flash.message = "User ${userToSave.userName} saved successfully"
+        flash.message = "User ${params.userToEdit.userName} saved successfully"
         flash.userToEdit = null
         redirect( action: "index" )
     }
