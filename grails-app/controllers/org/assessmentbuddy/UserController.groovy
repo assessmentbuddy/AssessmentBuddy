@@ -2,6 +2,7 @@ package org.assessmentbuddy
 
 import org.assessmentbuddy.model.BaseException
 import org.assessmentbuddy.model.NoSuchIdException
+import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
 import org.assessmentbuddy.model.Role
 import org.assessmentbuddy.model.User
@@ -21,11 +22,14 @@ class UserController {
     }
     
     def create() {
+        PermissionsCheck.canEditUser(session.user, null)
         // Edit a new user
         redirect( action: 'edit' )
     }
     
     def edit() {
+        PermissionsCheck.canEditUser(session.user, params.id?.toLong())
+
         User userToEdit
         def password = "", passwordConfirm = ""
         
@@ -65,13 +69,15 @@ class UserController {
             passwordConfirm: passwordConfirm,
             roleTypes: Role.RoleType.values(),
             scopes: Role.Scope.values(),
-            programs: Program.list().sort { it.name }
+            programs: Program.list().sort { it.name },
+            roleIds: userToEdit.roles.collect { it.id }
         ]
     }
     
     def save() {
+        PermissionsCheck.canEditUser(session.user, params.id?.toLong())
+
         def userToEditParams = params.userToEdit
-        def roleToAddParams = params.roleToAdd
 
         // FIXME: permissions check (make sure logged in user is an admin
         // or is the same as the user being edited)
@@ -100,20 +106,28 @@ class UserController {
             return
         }
         
-        /*
-        // Get role ids (which are in a hidden form parameter),
-        // so we know which roles might have been selected for
-        // deletion
-        def roleIds = []
-        if (params.roleIds) {
-            roleIds = params.roleIds.split(/\s+/).collect { it.toLong() }
+        // Marshal information about role(s) to delete and add.
+        // Only a full admin is allowed to edit user roles.
+        def rolesToDelete = []
+        def roleToAddParams = [:]
+        if (session.user.isAdmin()) {
+            // Find roles to delete.  The roleIds hidden form parameter
+            // specifies the ids of the user's roles.
+            if (params.roleIds) {
+                def roleIds = params.roleIds.split(/\s+/).collect { it.toLong() }
+                roleIds.each { roleId ->
+                    if (params["rolesToDelete.${roleId}"]) {
+                        rolesToDelete.add(roleId)
+                    }
+                }
+            }
+            // Set role to add parameters
+            roleToAddParams = params.roleToAdd
         }
-        */
-       // Only ALL_PROGRAMS admins are allowed to edit user roles
 
         // Attempt to persist changes to user and roles
         try {
-            userService.saveUserAndUpdateRoles(params?.id, params?.password, userToEditParams, roleIds, roleToAddParams)
+            userService.saveUserAndUpdateRoles(params?.id, params?.password, userToEditParams, rolesToDelete, roleToAddParams)
         } catch (NoSuchIdException e) {
             response.sendError(404)
             return
@@ -129,6 +143,11 @@ class UserController {
         flash.message = "User ${params.userToEdit.userName} saved successfully"
         flash.userToEdit = null
         redirect( action: "index" )
+    }
+    
+    def permissionsException(final PermissionsException e) {
+        logException(e)
+        response.sendError(403)
     }
     
     private void storeForReediting(m, u, p) {

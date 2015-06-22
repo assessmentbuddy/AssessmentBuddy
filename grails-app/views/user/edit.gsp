@@ -37,7 +37,7 @@
                     <div class="formsection">
                         Edit roles
                     </div>
-                    <g:hiddenField name="roleIds" value="${userToEdit.roles?.join(' ')}"/>
+                    <g:hiddenField name="roleIds" value="${roleIds.join(' ')}"/>
                     <g:each in="${userToEdit.roles?.sort { it.id }}" var="r">
                         <div class="formfield">
                             <label class="left">Current role:</label>
