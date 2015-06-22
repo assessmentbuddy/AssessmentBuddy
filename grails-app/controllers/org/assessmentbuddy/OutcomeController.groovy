@@ -1,30 +1,42 @@
 package org.assessmentbuddy
 
-import org.assessmentbuddy.model.Outcome
+import grails.util.Mixin
 
+import org.assessmentbuddy.model.BaseException
+import org.assessmentbuddy.model.NoSuchIdException
+import org.assessmentbuddy.model.Outcome
+import org.assessmentbuddy.model.PermissionsCheck
+
+@Mixin(PermissionsCheck)
 class OutcomeController {
+    def outcomeService
 
     def index() {
+        def outcomes = []
+        boolean mayEdit = false
+        
         if (!session.program) {
             flash.message = "Please select a program"
-            return
-        }
-        
-        if (!session.user.hasAdminRightsIn(session.program)) {
-            flash.message = "You don't have admin rights in ${session.program.name}"
-            return
+        } else if (!canEditOutcome(session.program).call(session.user)) {
+            flash.message = "You don't have permission to edit outcomes in ${session.program.name}"
+        } else {
+            outcomes = Outcome.getOutcomesFor(session.program)
+            mayEdit = true
         }
         
         //flash.message = "Looks like you can add/edit outcomes for ${session.program.name}"
         
-        [ outcomes : Outcome.getOutcomesFor(session.program) ]
+        [ outcomes : outcomes, mayEdit: mayEdit ]
     }
     
     def create() {
+        permCheck(canEditOutcome(session.program), session.user, "Create/edit outcome")
         redirect(action: 'edit')
     }
     
     def edit() {
+        permCheck(canEditOutcome(session.program), session.user, "Create/edit outcome")
+        
         def outcomeToEdit
         
         if (params.id) {
@@ -49,49 +61,18 @@ class OutcomeController {
     }
     
     def save() {
-        // Make sure a program is selected
-        if (!session.program) {
-            flash.message = "A program must be selected"
-            flash.outcomeToEdit = new Outcome(params)
-            redirect(action: 'edit', id: params.id)
-            return
-        }
-        
-        // Make sure the user is an admin in the selected program
-        if (!session.user.hasAdminRightsIn(session.program)) {
-            flash.message = "User ${session.user.userName} doesn't have permission to create outcomes in ${session.program.name}"
-            flash.outcomeToEdit = new Outcome(params)
-            redirect(action: 'edit', id: params.id)
-            return
-        }
+        permCheck(canEditOutcome(session.program), session.user, "Create/edit outcome")
 
-        def outcomeToSave
-        if (params.id) {
-            // Modifying existing program
-            outcomeToSave = Outcome.get(params.id.toLong())
-            if (!outcomeToSave) {
-                response.sendError(404)
-                return
-            }
-            // Make sure it really belongs to the current program
-            if (!outcomeToSave.program || outcomeToSave.program.id != session.program.id) {
-                flash.message = "Outcome ${outcomeToSave.id} doesn't belong to program ${session.program.id}?"
-                flash.outcomeToEdit = outcomeToSave
-                redirect(action: 'edit', id: params.id)
-                return
-            }
-            // Looks like we can proceed
-            outcomeToSave.properties = params
-        } else {
-            // Saving new program
-            outcomeToSave = new Outcome(params)
-            outcomeToSave.program = session.program
-        }
-        
-        if (!outcomeToSave.save(flush: true)) {
-            flash.message = "Could not save outcome"
-            flash.outcomeToEdit = outcomeToSave
-            redirect(action: 'edit', id: params.id)
+        // Attempt to persist the outcome
+        try {
+            outcomeService.saveOutcome(params, session.program)
+        } catch (NoSuchIdException e) {
+            response.sendError(404)
+            return
+        } catch (BaseException e) {
+            flash.message = "Could not save outcome: ${e.getMessage()}"
+            flash.outcomeToEdit = e.getBean()
+            redirect( action: 'edit', id: params.id )
             return
         }
  

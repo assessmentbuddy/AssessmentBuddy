@@ -1,12 +1,16 @@
 package org.assessmentbuddy
 
+import grails.util.Mixin
+
 import org.assessmentbuddy.model.BaseException
 import org.assessmentbuddy.model.NoSuchIdException
+import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
 import org.assessmentbuddy.model.Role
 import org.assessmentbuddy.model.User
 
+@Mixin(PermissionsCheck)
 class UserController {
     def bcryptService
     def userService
@@ -22,13 +26,13 @@ class UserController {
     }
     
     def create() {
-        PermissionsCheck.canEditUser(session.user, null)
+        permCheck(canEditUser(null), session.user, "create/edit user")
         // Edit a new user
         redirect( action: 'edit' )
     }
     
     def edit() {
-        PermissionsCheck.canEditUser(session.user, params.id?.toLong())
+        permCheck(canEditUser(params.id?.toLong()), session.user, "create/edit user")
 
         User userToEdit
         def password = "", passwordConfirm = ""
@@ -75,7 +79,7 @@ class UserController {
     }
     
     def save() {
-        PermissionsCheck.canEditUser(session.user, params.id?.toLong())
+        permCheck(canEditUser(params.id?.toLong()), session.user, "create/edit user")
 
         def userToEditParams = params.userToEdit
 
@@ -133,7 +137,7 @@ class UserController {
             return
         } catch (BaseException e) {
             // Failed to save, redirect to edit page
-            flash.message = "Could not save user"
+            flash.message = "Could not save user: ${e.getMessage()}"
             storeForReediting(flash, e.getBean(), params)
             redirect( action: 'edit', id: params.id )
             return

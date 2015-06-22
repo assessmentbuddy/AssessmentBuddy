@@ -1,14 +1,14 @@
 package org.assessmentbuddy.model
 
 class NoSuchIdException extends BaseException {
-    int id
+    long id
     
-    NoSuchIdException(String msg, int id) {
+    NoSuchIdException(String msg, long id) {
         super(msg)
         this.id = id
     }
     
-    int getId() {
+    long getId() {
         return id
     }
 }
