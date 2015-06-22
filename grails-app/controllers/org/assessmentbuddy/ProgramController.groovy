@@ -1,19 +1,36 @@
 package org.assessmentbuddy
 
+import grails.util.Mixin
+
+import org.assessmentbuddy.model.PermissionsCheck
+import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
 
+@Mixin(PermissionsCheck)
 class ProgramController {
 
     def index() {
-        def programs = Program.list()
-        [ programs: programs ]
+        def programs = []
+        boolean mayEdit = false
+        
+        if (!canEditProgram().call(session.user)) {
+            flash.message = "You don't have permission to create and edit programs"
+        } else {
+            programs = Program.list()
+            mayEdit = true
+        }
+        
+        [ programs: programs, mayEdit: mayEdit ]
     }
     
     def create() {
+        permCheck(canEditProgram(), session.user, "Create/edit program")
         redirect( action: 'edit' )
     }
     
     def edit() {
+        permCheck(canEditProgram(), session.user, "Create/edit program")
+
         def programToEdit
         
         if (!params.id) {
@@ -37,6 +54,8 @@ class ProgramController {
     }
     
     def save() {
+        permCheck(canEditProgram(), session.user, "Create/edit program")
+
         def program
         
         if (params.id) {
@@ -83,5 +102,10 @@ class ProgramController {
         } else {
             redirect(controller: "home", action: "index")
         }
+    }
+    
+    def permissionsException(final PermissionsException e) {
+        logException(e)
+        response.sendError(403)
     }
 }

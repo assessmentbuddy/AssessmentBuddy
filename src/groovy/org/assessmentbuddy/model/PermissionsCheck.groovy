@@ -14,6 +14,15 @@ class PermissionsCheck {
     }
     
     /**
+     * Return a predicate to check whether the logged in user
+     * has permission to create and edit programs.
+     * Only full admins have this privilege.
+     */
+    Closure canEditProgram() {
+        return { loggedInUser -> loggedInUser.isAdmin() }
+    }
+    
+    /**
      * Return a predicate to check whether the logged-in user has
      * permission to create or edit an outcome in the given program.
      */

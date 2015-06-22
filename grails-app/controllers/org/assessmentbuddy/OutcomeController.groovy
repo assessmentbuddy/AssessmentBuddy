@@ -6,6 +6,7 @@ import org.assessmentbuddy.model.BaseException
 import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.Outcome
 import org.assessmentbuddy.model.PermissionsCheck
+import org.assessmentbuddy.model.PermissionsException
 
 @Mixin(PermissionsCheck)
 class OutcomeController {
@@ -78,5 +79,10 @@ class OutcomeController {
  
         flash.message = "Outcome saved successfully"
         redirect( action: 'index' )
+    }
+    
+    def permissionsException(final PermissionsException e) {
+        logException(e)
+        response.sendError(403)
     }
 }
