@@ -100,6 +100,7 @@ class UserController {
             return
         }
         
+        /*
         // Get role ids (which are in a hidden form parameter),
         // so we know which roles might have been selected for
         // deletion
@@ -107,6 +108,8 @@ class UserController {
         if (params.roleIds) {
             roleIds = params.roleIds.split(/\s+/).collect { it.toLong() }
         }
+        */
+       // Only ALL_PROGRAMS admins are allowed to edit user roles
 
         // Attempt to persist changes to user and roles
         try {

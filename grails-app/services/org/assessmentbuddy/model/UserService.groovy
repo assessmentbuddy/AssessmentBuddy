@@ -39,13 +39,6 @@ class UserService {
         }
         
         if (!userToSave.save()) {
-            /*
-            // Failed to save, redirect to edit page
-            flash.message = "Could not save user"
-            storeForReediting(flash, userToSave, params)
-            redirect( action: 'edit', id: userToSave.id )
-            return
-            */
            throw new SaveFailedException("Could not save user", userToSave)
         }
         

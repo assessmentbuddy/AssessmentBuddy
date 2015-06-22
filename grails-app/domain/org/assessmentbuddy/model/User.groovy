@@ -34,13 +34,16 @@ class User {
         email size: 3..200
     }
     
+    /**
+     * Returns whether or not the user is an administrator for all programs.
+     */
     boolean isAdmin() {
-        boolean res = roles.any { it.roleType == Role.RoleType.ADMIN }
-        println "User ${userName} is admin: ${res}"
-        println "There are ${roles.size()} roles"
-        return res
+        return roles.any { it.roleType == Role.RoleType.ADMIN && it.scope == Role.Scope.ALL_PROGRAMS }
     }
     
+    /**
+     * Returns whether or not the user is an administrator for a specific program.
+     */
     boolean hasAdminRightsIn(Program program) {
         return roles.any { it.isAdminFor(program) }
     } 
