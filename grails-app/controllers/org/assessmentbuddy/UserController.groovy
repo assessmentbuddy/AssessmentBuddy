@@ -8,6 +8,7 @@ import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
 import org.assessmentbuddy.model.Role
+import org.assessmentbuddy.model.SaveFailedException
 import org.assessmentbuddy.model.User
 
 @Mixin(PermissionsCheck)
@@ -135,7 +136,7 @@ class UserController {
         } catch (NoSuchIdException e) {
             response.sendError(404)
             return
-        } catch (BaseException e) {
+        } catch (SaveFailedException e) {
             // Failed to save, redirect to edit page
             flash.message = "Could not save user: ${e.getMessage()}"
             storeForReediting(flash, e.getBean(), params)

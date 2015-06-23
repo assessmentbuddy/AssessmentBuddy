@@ -1,9 +1,15 @@
 package org.assessmentbuddy
 
+import grails.util.Mixin
+
 import org.assessmentbuddy.model.Indicator
 import org.assessmentbuddy.model.Outcome
+import org.assessmentbuddy.model.PermissionsCheck
+import org.assessmentbuddy.model.PermissionsException
 
+@Mixin()
 class IndicatorController {
+    def indicatorService
 
     def index() {
         def indicators = session.program ? Indicator.getIndicatorsFor(session.program) : []

@@ -7,6 +7,7 @@ import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.Outcome
 import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
+import org.assessmentbuddy.model.SaveFailedException
 
 @Mixin(PermissionsCheck)
 class OutcomeController {
@@ -70,7 +71,7 @@ class OutcomeController {
         } catch (NoSuchIdException e) {
             response.sendError(404)
             return
-        } catch (BaseException e) {
+        } catch (SaveFailedException e) {
             flash.message = "Could not save outcome: ${e.getMessage()}"
             flash.outcomeToEdit = e.getBean()
             redirect( action: 'edit', id: params.id )

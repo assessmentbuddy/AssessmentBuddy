@@ -1,13 +1,16 @@
 package org.assessmentbuddy
 
 import grails.util.Mixin
+import org.assessmentbuddy.model.NoSuchIdException
 
 import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
+import org.assessmentbuddy.model.SaveFailedException
 
 @Mixin(PermissionsCheck)
 class ProgramController {
+    def programService
 
     def index() {
         def programs = []
@@ -56,29 +59,19 @@ class ProgramController {
     def save() {
         permCheck(canEditProgram(), session.user, "Create/edit program")
 
-        def program
-        
-        if (params.id) {
-            // Editing existing program
-            program = Program.get(params.id.toLong())
-            if (!program) {
-                response.sendError(404)
-                return
-            }
-            program.properties = params
-        } else {
-            // Creating new program
-            program = new Program(params)
-        }
-        
-        if (!program.save(flush: true)) {
-            flash.message = "Could not save program"
-            flash.programToEdit = program
-            redirect( action: 'edit', id: program.id )
+        try {
+            programService.saveProgram(params)
+        } catch (NoSuchIdException e) {
+            response.sendError(404)
+            return
+        } catch (SaveFailedException e) {
+            flash.message = e.getMessage()
+            flash.programToEdit = e.getBean()
+            redirect(action: 'edit', id: params.id)
             return
         }
-        
-        flash.message = "Program ${program.name} saved successfully"
+       
+        flash.message = "Program ${params.name} saved successfully"
         redirect( action: 'index' )
     }
     
