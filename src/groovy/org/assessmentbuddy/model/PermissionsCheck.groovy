@@ -29,6 +29,33 @@ class PermissionsCheck {
     Closure canEditOutcome(Program program) {
         return { loggedInUser -> program != null && loggedInUser.hasAdminRightsIn(program) }
     }
+    
+    /**
+     * Return a predicate to check whethre the logged-in user
+     * has permission to create or edit an indicator in the
+     * given program associated with the given outcome.
+     * If the outcome is not specified (null), then the
+     * predicate answers whether the user may create a new
+     * indicator for the program.
+     */
+    Closure canEditIndicator(Program program, Outcome outcome) {
+        return { loggedInUser ->
+            // Make sure program is specified
+            if (!program) {
+                return false
+            }
+            // User must have admin rights for the program
+            if (!loggedInUser.hasAdminRightsIn(program)) {
+                return false
+            }
+            // If an outcome is specified,
+            // make sure it is really in the program
+            if (outcome && (!outcome.program || outcome.program.id != program.id)) {
+                return false
+            }
+            return true
+        }
+    }
 
     /**
      * Do a permissions check, throwing a PermissionsException if the check fails.

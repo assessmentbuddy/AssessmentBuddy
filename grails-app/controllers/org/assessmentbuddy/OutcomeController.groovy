@@ -2,7 +2,6 @@ package org.assessmentbuddy
 
 import grails.util.Mixin
 
-import org.assessmentbuddy.model.BaseException
 import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.Outcome
 import org.assessmentbuddy.model.PermissionsCheck

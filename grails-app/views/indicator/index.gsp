@@ -4,11 +4,10 @@
         <title><g:meta name="app.name"/>: Indicators</title>
     </head>
     <body>
-        <div class="pageinfo">Manage indicators</div>
-        
-        <g:link class="btnlink" controller="indicator" action="create">Create new indicator</g:link>
-        
-        <g:if test="${session.program}">
+        <g:if test="${mayEdit}">
+            <div class="pageinfo">Manage indicators</div>
+            <g:link class="btnlink" controller="indicator" action="create">Create new indicator</g:link>
+
             <div class="pageinfo">Edit existing indicators in ${session.program.name}</div>
 
             <g:each in="${indicators}" var="indicator">

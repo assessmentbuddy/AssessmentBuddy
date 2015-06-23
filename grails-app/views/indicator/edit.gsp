@@ -17,6 +17,7 @@
                         optionKey="id"
                         optionValue="${{it.toDisplay()}}"
                         noSelection="[ '-1' : 'Select outcome' ]"
+                        value="${indicatorToEdit.outcome ? indicatorToEdit.outcome.id : -1}"
                         />
                 </div>
                 <div class="formfield">
