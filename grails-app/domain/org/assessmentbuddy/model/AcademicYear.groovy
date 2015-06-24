@@ -22,4 +22,12 @@ class AcademicYear {
 
     static constraints = {
     }
+    
+    String toDisplay() {
+        if (start == end) {
+            return start.toString()
+        } else {
+            return start + "—" + end
+        }
+    }
 }

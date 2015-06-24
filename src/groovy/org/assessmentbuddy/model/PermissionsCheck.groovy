@@ -58,6 +58,14 @@ class PermissionsCheck {
     }
 
     /**
+     * Return a predicate that checks whether the logged-in user
+     * can create/edit academic years.
+     */
+    Closure canEditAcademicYear() {
+        return { loggedInUser -> loggedInUser.isAdmin() }
+    }
+
+    /**
      * Do a permissions check, throwing a PermissionsException if the check fails.
      */
     void permCheck(Closure check, User loggedInUser, String msgIfFail) {
