@@ -26,4 +26,8 @@ class Rubric {
     static constraints = {
         name size: 1..64
     }
+    
+    String toDisplay() {
+        return name
+    }
 }

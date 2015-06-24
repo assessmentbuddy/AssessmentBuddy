@@ -1,14 +1,17 @@
 package org.assessmentbuddy
 
-class HomeController {
+import org.assessmentbuddy.model.Role
 
+class HomeController {
     def index() {
         if (!session.user.isAttached()) {
             session.user.attach()
         }
         
-        println "HomeController: user ${session.user.userName} has ${session.user.roles.size()} role(s)"
+        // Based on user role(s), determine which menu items to show
+        def isFullAdmin = session.user.isAdmin()
+        def isAnyAdmin = session.user.roles.any { it.roleType == Role.RoleType.ADMIN }
         
-        [ user : session.user ]
+        [ isFullAdmin: isFullAdmin, isAnyAdmin: isAnyAdmin ]
     }
 }

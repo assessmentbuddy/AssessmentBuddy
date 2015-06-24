@@ -64,6 +64,14 @@ class PermissionsCheck {
     Closure canEditAcademicYear() {
         return { loggedInUser -> loggedInUser.isAdmin() }
     }
+    
+    /**
+     * Return a predicate that checks whether the logged-in user
+     * can create/edit rubrics in the specified program.
+     */
+    Closure canEditRubric(Program program) {
+        return { loggedInUser -> program && loggedInUser.hasAdminRightsIn(program) }
+    }
 
     /**
      * Do a permissions check, throwing a PermissionsException if the check fails.
