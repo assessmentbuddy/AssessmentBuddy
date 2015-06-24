@@ -2,14 +2,14 @@ package org.assessmentbuddy
 
 import grails.util.Mixin
 
-import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.Outcome
 import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.SaveFailedException
+import org.assessmentbuddy.model.StandardExceptionHandlers
 
 @Mixin(PermissionsCheck)
-class OutcomeController {
+class OutcomeController extends StandardExceptionHandlers {
     def outcomeService
 
     def index() {
@@ -39,21 +39,15 @@ class OutcomeController {
         permCheck(canEditOutcome(session.program), session.user, "Create/edit outcome")
         
         def outcomeToEdit
-        
-        if (params.id) {
-            // Edit existing outcome
-            outcomeToEdit = Outcome.get(params.id)
-            if (!outcomeToEdit) {
-                response.sendError(404)
-                return
-            }
+        if (flash.outcomeToEdit) {
+            // there is an outcome from a previous form submission
+            outcomeToEdit = flash.outcomeToEdit
         } else {
-            // Editing a new outcome
-            if (flash.outcomeToEdit) {
-                // there is an outcome from a previous form submission
-                outcomeToEdit = flash.outcomeToEdit
+            if (params.id) {
+                // Edit existing outcome
+                outcomeToEdit = outcomeService.findOutcomeForId(params.id.toLong())
             } else {
-                // create a new Outcome
+                // Create a new Outcome
                 outcomeToEdit = new Outcome()
             }
         }
@@ -67,9 +61,6 @@ class OutcomeController {
         // Attempt to persist the outcome
         try {
             outcomeService.saveOutcome(params, session.program)
-        } catch (NoSuchIdException e) {
-            response.sendError(404)
-            return
         } catch (SaveFailedException e) {
             flash.message = "Could not save outcome: ${e.getMessage()}"
             flash.outcomeToEdit = e.getBean()
@@ -79,10 +70,5 @@ class OutcomeController {
  
         flash.message = "Outcome saved successfully"
         redirect( action: 'index' )
-    }
-    
-    def permissionsException(final PermissionsException e) {
-        logException(e)
-        response.sendError(403)
     }
 }

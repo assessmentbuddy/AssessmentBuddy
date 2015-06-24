@@ -3,12 +3,12 @@ package org.assessmentbuddy
 import grails.util.Mixin
 
 import org.assessmentbuddy.model.AcademicYear
-import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.SaveFailedException
+import org.assessmentbuddy.model.StandardExceptionHandlers
 
 @Mixin(PermissionsCheck)
-class AcademicYearController {
+class AcademicYearController extends StandardExceptionHandlers {
     def academicYearService
 
     def index() {
@@ -40,11 +40,7 @@ class AcademicYearController {
         } else {
             if (params.id) {
                 // Load from database
-                academicYearToEdit = AcademicYear.get(params.id.toLong())
-                if (!academicYearToEdit) {
-                    response.sendError(404)
-                    return
-                }
+                academicYearToEdit = academicYearService.findAcademicYearForId(params.id.toLong())
             } else {
                 // Create new AcademicYear
                 academicYearToEdit = new AcademicYear()
@@ -59,9 +55,6 @@ class AcademicYearController {
 
         try {
             academicYearService.saveAcademicYear(params)
-        } catch (NoSuchIdException e) {
-            response.sendError(404)
-            return
         } catch (SaveFailedException e) {
             flash.message = e.getMessage()
             flash.academicYearToEdit = e.getBean()

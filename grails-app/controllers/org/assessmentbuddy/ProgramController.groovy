@@ -57,9 +57,6 @@ class ProgramController extends StandardExceptionHandlers {
 
         try {
             programService.saveProgram(params)
-        } catch (NoSuchIdException e) {
-            response.sendError(404)
-            return
         } catch (SaveFailedException e) {
             flash.message = e.getMessage()
             flash.programToEdit = e.getBean()
@@ -79,7 +76,7 @@ class ProgramController extends StandardExceptionHandlers {
             session.program = null
         } else {
             println "Attempting to select program ${progId}"
-            def program = Program.get(progId)
+            def program = programService.findProgramForId(progId)
             println "Found? ${program?.name}"
             session.program = session.availablePrograms.any { it.id == program.id } ? program : null
             println "Selected: ${session.program?.name}"

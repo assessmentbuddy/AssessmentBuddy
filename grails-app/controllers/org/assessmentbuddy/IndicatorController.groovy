@@ -3,14 +3,14 @@ package org.assessmentbuddy
 import grails.util.Mixin
 
 import org.assessmentbuddy.model.Indicator
-import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.Outcome
 import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.SaveFailedException
+import org.assessmentbuddy.model.StandardExceptionHandlers
 
 @Mixin(PermissionsCheck)
-class IndicatorController {
+class IndicatorController extends StandardExceptionHandlers {
     def indicatorService
 
     def index() {
@@ -48,17 +48,14 @@ class IndicatorController {
             outcomes = Outcome.getOutcomesFor(session.program)
         }
         
-        if (params.id) {
-            // Editing existing indicator
-            indicatorToEdit = Indicator.get(params.id.toLong())
-            if (!indicatorToEdit) {
-                response.sendError(404)
-                return
-            }
+        // Determine the indicator to edit
+        if (flash.indicatorToEdit) {
+            // Result of previous form submission
+            indicatorToEdit = flash.indicatorToEdit
         } else {
-            if (flash.indicatorToEdit) {
-                // Result of previous form submission
-                indicatorToEdit = flash.indicatorToEdit
+            if (params.id) {
+                // Editing existing indicator
+                indicatorToEdit = indicatorService.findIndicatorForId(params.id.toLong())
             } else {
                 // Create new indicator
                 indicatorToEdit = new Indicator()
@@ -90,9 +87,6 @@ class IndicatorController {
         // Save the indicator
         try {
             indicatorService.saveIndicator(params, outcome)
-        } catch (NoSuchIdException e) {
-            response.sendError(404)
-            return
         } catch (SaveFailedException e) {
             flash.message = e.getMessage()
             flash.indicatorToEdit = e.getBean()

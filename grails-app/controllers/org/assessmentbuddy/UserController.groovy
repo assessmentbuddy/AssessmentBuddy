@@ -3,7 +3,6 @@ package org.assessmentbuddy
 import grails.util.Mixin
 
 import org.assessmentbuddy.model.BaseException
-import org.assessmentbuddy.model.NoSuchIdException
 import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
@@ -118,9 +117,6 @@ class UserController extends StandardExceptionHandlers {
         // Attempt to persist changes to user and roles
         try {
             userService.saveUserAndUpdateRoles(params?.id, params?.password, userToEditParams, rolesToDelete, roleToAddParams)
-        } catch (NoSuchIdException e) {
-            response.sendError(404)
-            return
         } catch (SaveFailedException e) {
             // Failed to save, redirect to edit page
             flash.message = "Could not save user: ${e.getMessage()}"

@@ -4,6 +4,14 @@ import grails.transaction.Transactional
 
 @Transactional
 class OutcomeService {
+    Outcome findOutcomeForId(long id) {
+        Outcome outcome = Outcome.get(id)
+        if (!outcome) {
+            throw new NoSuchIdException("No outcome found for id ${id}")
+        }
+        return outcome
+    }
+    
     def saveOutcome(outcomeParams, currentProgram) {
         def outcomeToSave
         if (outcomeParams.id) {

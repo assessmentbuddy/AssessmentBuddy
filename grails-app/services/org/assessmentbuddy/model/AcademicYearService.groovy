@@ -4,6 +4,14 @@ import grails.transaction.Transactional
 
 @Transactional
 class AcademicYearService {
+    AcademicYear findAcademicYearForId(long id) {
+        AcademicYear academicYear = AcademicYear.get(id)
+        if (!academicYear) {
+            throw new NoSuchIdException("No academic year found for id ${id}", id)
+        }
+        return academicYear
+    }
+    
     def saveAcademicYear(academicYearParams) {
         def academicYearToSave
         if (academicYearParams.id) {
