@@ -7,9 +7,10 @@ import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
 import org.assessmentbuddy.model.SaveFailedException
+import org.assessmentbuddy.model.StandardExceptionHandlers
 
 @Mixin(PermissionsCheck)
-class ProgramController {
+class ProgramController extends StandardExceptionHandlers {
     def programService
 
     def index() {
@@ -35,21 +36,16 @@ class ProgramController {
         permCheck(canEditProgram(), session.user, "Create/edit program")
 
         def programToEdit
-        
-        if (!params.id) {
-            if (flash.programToEdit) {
-                // This was set by a previous action
-                programToEdit = flash.programToEdit
-            } else {
+        if (flash.programToEdit) {
+            // This was set by a previous action
+            programToEdit = flash.programToEdit
+        } else {
+            if (!params.id) {
                 // Edit a new progrma
                 programToEdit = new Program()
-            }
-        } else {
-            // Edit existing program
-            programToEdit = Program.get(params.id)
-            if (!programToEdit) {
-                response.sendError(404)
-                return
+            } else {
+                // Edit existing program
+                programToEdit = programService.findProgramForId(params.id.toLong())
             }
         }
         
@@ -95,10 +91,5 @@ class ProgramController {
         } else {
             redirect(controller: "home", action: "index")
         }
-    }
-    
-    def permissionsException(final PermissionsException e) {
-        logException(e)
-        response.sendError(403)
     }
 }

@@ -4,6 +4,13 @@ import grails.transaction.Transactional
 
 @Transactional
 class ProgramService {
+    Program findProgramForId(long id) {
+        Program program = Program.get(id)
+        if (!program) {
+            throw new NoSuchIdException("No program found for id ${id}", id)
+        }
+        return program
+    }
 
     def saveProgram(programParams) {
         def programToSave

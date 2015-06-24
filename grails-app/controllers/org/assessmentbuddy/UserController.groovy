@@ -9,10 +9,11 @@ import org.assessmentbuddy.model.PermissionsException
 import org.assessmentbuddy.model.Program
 import org.assessmentbuddy.model.Role
 import org.assessmentbuddy.model.SaveFailedException
+import org.assessmentbuddy.model.StandardExceptionHandlers
 import org.assessmentbuddy.model.User
 
 @Mixin(PermissionsCheck)
-class UserController {
+class UserController extends StandardExceptionHandlers {
     def bcryptService
     def userService
 
@@ -38,28 +39,16 @@ class UserController {
         User userToEdit
         def password = "", passwordConfirm = ""
         
-        if (!params.id) {
-            // If the user to edit is in flash storage, use that,
-            // otherwise create a new one
-            if (flash.userToEdit) {
-                // These are from previous edit form entries
-                (userToEdit, password, passwordConfirm) = loadForReediting(flash)
-            } else {
-                userToEdit = new User()
-            }
+        if (flash.userToEdit) {
+            // These are from previous edit form entries
+            (userToEdit, password, passwordConfirm) = loadForReediting(flash)
         } else {
-            // Edit existing user
-            if (flash.userToEdit) {
-                // User being edited, may indicate errors
-                (userToEdit, password, passwordConfirm) = loadForReediting(flash)
+            if (!params.id) {
+                // Create new user
+                userToEdit = new User()
             } else {
-                // Load user from database
-                try {
-                    userToEdit = userService.findUserForId(params.id.toLong())
-                } catch (NoSuchIdException e) {
-                    response.sendError(404)
-                    return
-                }
+                // Edit existing user
+                userToEdit = userService.findUserForId(params.id.toLong())
             }
         }
         
@@ -120,11 +109,7 @@ class UserController {
             // specifies the ids of the user's roles.
             if (params.roleIds) {
                 def roleIds = params.roleIds.split(/\s+/).collect { it.toLong() }
-                roleIds.each { roleId ->
-                    if (params["rolesToDelete.${roleId}"]) {
-                        rolesToDelete.add(roleId)
-                    }
-                }
+                rolesToDelete = roleIds.findAll { params["rolesToDelete.${roleId}"] }
             }
             // Set role to add parameters
             roleToAddParams = params.roleToAdd
@@ -148,11 +133,6 @@ class UserController {
         flash.message = "User ${params.userToEdit.userName} saved successfully"
         flash.userToEdit = null
         redirect( action: "index" )
-    }
-    
-    def permissionsException(final PermissionsException e) {
-        logException(e)
-        response.sendError(403)
     }
     
     private void storeForReediting(m, u, p) {
