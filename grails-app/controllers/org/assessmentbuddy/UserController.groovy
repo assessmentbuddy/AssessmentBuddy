@@ -108,7 +108,7 @@ class UserController extends StandardExceptionHandlers {
             // specifies the ids of the user's roles.
             if (params.roleIds) {
                 def roleIds = params.roleIds.split(/\s+/).collect { it.toLong() }
-                rolesToDelete = roleIds.findAll { params["rolesToDelete.${roleId}"] }
+                rolesToDelete = roleIds.findAll { params["rolesToDelete.${it}"] }
             }
             // Set role to add parameters
             roleToAddParams = params.roleToAdd
