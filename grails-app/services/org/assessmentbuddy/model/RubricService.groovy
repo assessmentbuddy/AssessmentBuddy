@@ -63,4 +63,9 @@ class RubricService {
             }
         }
     }
+    
+    def findAchievementLevelsForRubric(rubric) {
+        rubric = Rubric.get(rubric.id)
+        return rubric.achievementLevels
+    }
 }
