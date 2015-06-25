@@ -40,12 +40,12 @@
                     <g:hiddenField name="roleIds" value="${roleIds.join(' ')}"/>
                     <g:each in="${userToEdit.roles?.sort { it.id }}" var="r">
                         <div class="formfield">
-                            <label class="left">Current role:</label>
+                            <label class="left" for="rolesToDelete.${r.id}">Current role:</label>
                             <span class="right">
-                                <span class="roleType">${r.roleType}</span>
-                                <span class="scope">${r.scope}</span>
+                                <span class="depfield">${r.roleType}</span>
+                                <span class="depfield">${r.scope}</span>
                                 <g:if test="${r.program}">
-                                    <span class="program">${r.program.name}</span>
+                                    <span class="depfield">${r.program.name}</span>
                                 </g:if>
                                 <g:checkBox name="rolesToDelete.${r.id}" value="${false}"/>
                                 <label for="rolesToDelete.${r.id}">Delete</label>

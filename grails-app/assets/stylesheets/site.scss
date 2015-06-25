@@ -94,13 +94,14 @@ fieldset {
 
 .formfield .left {
 	display: inline-block;
-	width: 10em;
+	width: 12em;
 	text-align: right;
 }
 
 .formfield .right {
 	margin-left: 1em;
         vertical-align: text-top;
+        display: inline-block;
 }
 
 .formfield div.right {
@@ -166,7 +167,9 @@ a.btnlink:hover {
     margin: 2ex 0;
 }
 
-.roleType, .scope, .program {
+/* Dependent fields (for things like Roles belonging to an edited User,
+ * and AchievementLevels belonging to an edited Rubric, etc.) */
+.depfield {
     font-variant: small-caps;
     font-size: 90%;
     background: #ddd;

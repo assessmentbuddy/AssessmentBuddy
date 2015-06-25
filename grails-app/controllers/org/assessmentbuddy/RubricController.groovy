@@ -35,6 +35,7 @@ class RubricController extends StandardExceptionHandlers {
     def edit() {
         permCheck(canEditRubric(session.program), session.user, "Create/edit rubric")
         
+        // Get the rubric to edit
         def rubricToEdit
         if (flash.rubricToEdit) {
             // From previous form submission
@@ -47,16 +48,33 @@ class RubricController extends StandardExceptionHandlers {
             rubricToEdit = new Rubric()
         }
         
-        [rubricToEdit: rubricToEdit]
+        // Enumerate the ids of the rubric's achievement levels
+        def achievementLevelIds = []
+        if (rubricToEdit.achievementLevels) {
+            achievementLevelIds = rubricToEdit.achievementLevels.sort { it.rank }
+        }
+        
+        [rubricToEdit: rubricToEdit, achievementLevelIds: achievementLevelIds]
     }
     
     def save() {
         permCheck(canEditRubric(session.program), session.user, "Create/edit rubric")
         
-        // TODO: marshal changes to achievement levels
+        def rubricParams = params.rubric
+        if (params.id) {
+            rubricParams.id = params.id
+        }
+        
+        // Gather information about achievement levels to add and delete
+        def achievementLevelToAddParams = params.achievementLevelToAdd
+        def achievementLevelsToDelete = []
+        if (params.achievementLevelIds) {
+            def achievementLevelIds = params.achievementLevelIds.split(/\s+/).collect { it.toLong() }
+            achievementLevelsToDelete = achievementLevelIds.findAll { id -> params["achievementLevelsToDelete.${id}"] }
+        }
         
         try {
-            rubricService.saveRubric(params, session.program)
+            rubricService.saveRubric(rubricParams, session.program, achievementLevelToAddParams, achievementLevelsToDelete)
         } catch (SaveFailedException e) {
             flash.message = e.getMessage()
             flash.rubricToEdit = e.getBean()
