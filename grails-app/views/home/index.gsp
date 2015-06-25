@@ -15,6 +15,7 @@
             <g:link controller="outcome" action="index" class="btnlink">Manage outcomes</g:link>
             <g:link controller="indicator" action="index" class="btnlink">Manage indicators</g:link>
             <g:link controller="rubric" action="index" class="btnlink">Manage rubrics</g:link>
+            <g:link controller="target" action="index" class="btnlink">Manage targets</g:link>
         </g:if>
     </body>
 </html>

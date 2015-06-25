@@ -20,9 +20,13 @@ class Target {
     String name
     double percentAtOrAbove
     
-    static belongsTo = [ achievementLevel: AchievementLevel ]
+    static belongsTo = [ rubric: Rubric, achievementLevel: AchievementLevel ]
 
     static constraints = {
         name size: 1..64
+    }
+    
+    String toDisplay() {
+        return name
     }
 }

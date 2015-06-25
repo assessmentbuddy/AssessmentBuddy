@@ -72,6 +72,14 @@ class PermissionsCheck {
     Closure canEditRubric(Program program) {
         return { loggedInUser -> program && loggedInUser.hasAdminRightsIn(program) }
     }
+    
+    /**
+     * Return a predicate that checks whether the logged-in user
+     * can create/edit targets in the specified program.
+     */
+    Closure canEditTarget(Program program) {
+        return { loggedInUser -> program && loggedInUser.hasAdminRightsIn(program) }
+    }
 
     /**
      * Do a permissions check, throwing a PermissionsException if the check fails.

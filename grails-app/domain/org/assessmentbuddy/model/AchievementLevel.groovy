@@ -21,8 +21,6 @@ class AchievementLevel {
     int rank
     
     static belongsTo = [ rubric : Rubric ]
-    
-    //static hasMany = [ achievementLevelTallies : AchievementLevelTally, targets : Target ]
 
     static constraints = {
         name size: 1..64
