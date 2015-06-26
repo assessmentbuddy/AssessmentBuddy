@@ -21,11 +21,13 @@
                     <g:select
                         class="right"
                         name="target.rubricId"
+                        id="rubricId"
                         from="${rubrics}"
                         optionKey="id"
                         optionValue="${{it.toDisplay()}}"
                         noSelection="[ '-1' : 'Select rubric' ]"
                         value="${targetToEdit.rubric ? targetToEdit.rubric.id : -1}"
+                        onchange="ab.getAchievementLevelsForRubric('${createLink(action:"ajaxGetAchievementLevelsForRubric")}')"
                         />
                 </div>
                 
@@ -34,6 +36,7 @@
                     <g:select
                         class="right"
                         name="target.achievementLevelId"
+                        id="achievementLevelId"
                         from="${achievementLevels}"
                         optionKey="id"
                         noSelection="[ '-1' : 'Select achievement level' ]"

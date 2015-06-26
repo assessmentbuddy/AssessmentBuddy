@@ -1,6 +1,9 @@
 package org.assessmentbuddy
 
+import grails.converters.JSON
+
 import grails.util.Mixin
+import org.assessmentbuddy.model.NoSuchIdException
 
 import org.assessmentbuddy.model.PermissionsCheck
 import org.assessmentbuddy.model.StandardExceptionHandlers
@@ -65,5 +68,17 @@ class TargetController extends StandardExceptionHandlers {
         // TODO: implement
         flash.message = "Should be saving the target"
         redirect(action: 'index')
+    }
+    
+    def ajaxGetAchievementLevelsForRubric() {
+        println "AJAX: getting achievement levels for rubric id=${params.id}"
+        def achievementLevels
+        try {
+            def rubric = rubricService.findRubricForId(params.id.toLong())
+            achievementLevels = rubric.achievementLevels
+        } catch (NoSuchIdException e) {
+            achievementLevels = []
+        }
+        render achievementLevels as JSON
     }
 }
