@@ -5,7 +5,13 @@
         <title><g:layoutTitle default="AssessmentBuddy"/></title>
         <asset:stylesheet href="site.css"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <g:javascript library="jquery" plugin="jquery"/>
         <asset:javascript src="assessmentbuddy.js"/>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                ab.init();
+            });
+        </script>
         <g:layoutHead/>
     </head>
     <body>
